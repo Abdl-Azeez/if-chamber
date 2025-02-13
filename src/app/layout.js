@@ -1,25 +1,23 @@
-"use client";
-import { usePathname } from "next/navigation";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+import PropTypes from "prop-types";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "Islamic Finance Chamber",
+  description:
+    "A global community for Islamic Finance experts and enthusiasts.",
+};
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-  const isAdminRoute =
-    pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
-
   return (
     <html lang="en">
-      <body className="bg-white text-gray-900">
-        {isAdminRoute ? (
-          <>{children} </>
-        ) : (
-          <>
-            <Navbar />
-            <main className="pt-16">{children}</main>
-          </>
-        )}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
+
+RootLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
