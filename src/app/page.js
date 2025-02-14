@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
+import TrendingContent from "./components/Trending";
 
 export default function Home() {
   const [news, setNews] = useState([]);
@@ -19,7 +20,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-full">
+    <main className="min-h-full bg-white">
       <Navbar isHome={true} />
 
       {/* Hero Section */}
@@ -34,12 +35,12 @@ export default function Home() {
           alt="Hero Background"
           layout="fill"
           objectFit="cover"
-          className="z-[-1]"
+          // className="z-[-1]"
           priority
           onLoad={() => setImageLoaded(true)}
         />
         <div className="pl-12 max-w-6xl relative z-10 mb-20">
-          <h1 className="text-5xl font-bold mb-4">
+          <h1 className="text-6xl font-bold mb-4">
             Empowering Ethical Finance
             <br />
             and Islamic Growth
@@ -49,20 +50,20 @@ export default function Home() {
             banking, and economic sustainability.
           </p>
           <div className="space-x-4">
-            <button className="bg-[#84670A] text-white px-2 py-2">
+            <button className="bg-[#84670A] text-white px-2 py-2 relative group">
               Request Invitation
-              <hr className="border-t-4 mt-2 mb-[-3px] rounded" />
+              <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
             </button>
-            <button className="bg-[#025F1CCC] hover:bg-[#025F1E] text-white px-2 py-2 ml-6">
+            <button className="bg-[#025F1CCC] hover:bg-[#025F1E] text-white px-2 py-2 ml-6 relative group">
               View Charter
-              <hr className="border-t-4 mt-2 mb-[-3px] rounded" />
+              <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
             </button>
           </div>
         </div>
       </section>
 
       {/* Latest News Section */}
-      <section className="py-16 pl-4 absolute top-[85dvh] right-0">
+      <section className="py-16 pl-4 absolute top-[85dvh] right-0 z-20">
         <div className="flex items-center w-screen overflow-hidden">
           <h2 className="text-lg font-bold mb-8 w-1/4 pl-16 h-96 flex items-center">
             LATEST NEWS
@@ -84,21 +85,28 @@ export default function Home() {
                   .slice(0, 3)
                   .map((article) => (
                     <div
-                      className="news-card text-white py-6 px-6"
+                      className="news-card text-white py-6 px-6 relative group transition-all duration-300 ease-in-out transform hover:scale-105"
                       key={article?.description}
                     >
-                      <hr className="border-t-2 my-6 rounded" />
-                      <span className="text-sm mb-2">News</span>
-                      <h3 className="text-xl font-semibold mt-2 line-clamp-6">
+                      {/* Animated HR */}
+                      <hr className="border-t-2 my-6 rounded w-full group-hover:w-0 transition-all duration-500 ease-in-out" />
+                      {/* News Content */}
+                      <span className="text-sm mb-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                        News
+                      </span>
+                      <h3 className="text-xl font-semibold mt-2 line-clamp-6 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
                         <a
                           href={article?.link}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="hover:underline"
                         >
                           {article?.title}
                         </a>
                       </h3>
-                      <p className="mt-4 text-sm">Source: {article?.source}</p>
+                      <p className="mt-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                        Source: {article?.source}
+                      </p>
                     </div>
                   ))}
           </div>
@@ -106,7 +114,7 @@ export default function Home() {
       </section>
 
       {/* Events Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      {/* <section className="py-16 px-4 bg-gray-50">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -141,33 +149,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Trending Content Section */}
-      {/* <section className="py-16 px-4 bg-black text-white">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold mb-8">Trending Content</h2>
-          <div className="trending-content-grid">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="trending-card">
-                <Image
-                  src={`/trending-${item}.jpg`}
-                  alt={`Trending content ${item}`}
-                  width={600}
-                  height={600}
-                  className="w-full h-full"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80">
-                  <h3 className="text-xl font-semibold">Trending Content</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </section> */}
 
+      {/* Trending Content Section */}
+      <TrendingContent />
+
       {/* Research Section */}
-      <section className="py-16 px-4 bg-white">
+      {/* <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-2xl font-bold mb-6">Research and Reviews</h2>
           <p className="text-gray-600 mb-4">
@@ -178,7 +166,7 @@ export default function Home() {
             Check out recent research →
           </Link>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className="bg-[#84670A] text-white py-12">
