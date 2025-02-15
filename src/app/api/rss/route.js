@@ -1,10 +1,15 @@
 import Parser from "rss-parser";
 
-export async function GET() {
+export async function GET(req) {
   try {
     const parser = new Parser({
       headers: { "User-Agent": "Mozilla/5.0" }, // Prevents access issues
     });
+
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams.get("limit")) || 3;
+    const page = parseInt(searchParams.get("page")) || 1;
+    const startIndex = (page - 1) * limit;
 
     const feed = await parser.parseURL(
       "https://news.google.com/rss/search?q=Islamic+Finance&hl=en-US&gl=US&ceid=US:en"
@@ -32,7 +37,7 @@ export async function GET() {
         description: item.contentSnippet || "",
       }))
       .sort((a, b) => b.date - a.date) // Sort by latest date
-      .slice(0, 10); // Return only the latest 10 news items
+      .slice(startIndex, startIndex + limit); // Apply pagination
 
     return Response.json(latestNews);
   } catch (error) {

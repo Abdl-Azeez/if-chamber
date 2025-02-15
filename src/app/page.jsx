@@ -4,6 +4,7 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
 import TrendingContent from "./components/Trending";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [news, setNews] = useState([]);
@@ -11,11 +12,17 @@ export default function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    fetch("/api/rss")
+    setLoading(true); // Set loading to true before fetching
+
+    fetch("/api/rss?limit=3") // Add limit=3 to restrict results
       .then((res) => res.json())
       .then((data) => {
         setNews(data);
         setLoading(false); // Set loading to false when data is fetched
+      })
+      .catch((error) => {
+        console.error("Error fetching news:", error);
+        setLoading(false); // Ensure loading is disabled on error
       });
   }, []);
 
@@ -80,35 +87,32 @@ export default function Home() {
                     <em className="mt-4 text-sm">Source: Loading___</em>
                   </div>
                 ))
-              : news
-                  .sort((a, b) => new Date(b.date) - new Date(a.date))
-                  .slice(0, 3)
-                  .map((article) => (
-                    <div
-                      className="news-card text-white py-6 px-6 relative group transition-all duration-300 ease-in-out transform hover:scale-105"
-                      key={article?.description}
-                    >
-                      {/* Animated HR */}
-                      <hr className="border-t-2 my-6 rounded w-full group-hover:w-0 transition-all duration-500 ease-in-out" />
-                      {/* News Content */}
-                      <span className="text-sm mb-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                        News
-                      </span>
-                      <h3 className="text-xl font-semibold mt-2 line-clamp-6 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-                        <a
-                          href={article?.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline"
-                        >
-                          {article?.title}
-                        </a>
-                      </h3>
-                      <p className="mt-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                        Source: {article?.source}
-                      </p>
-                    </div>
-                  ))}
+              : news.map((article) => (
+                  <div
+                    className="news-card text-white py-6 px-6 relative group transition-all duration-300 ease-in-out transform hover:scale-105"
+                    key={article?.description}
+                  >
+                    {/* Animated HR */}
+                    <hr className="border-t-2 my-6 rounded w-full group-hover:w-0 transition-all duration-500 ease-in-out" />
+                    {/* News Content */}
+                    <span className="text-sm mb-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                      News
+                    </span>
+                    <h3 className="text-xl font-semibold mt-2 line-clamp-6 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+                      <a
+                        href={article?.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline"
+                      >
+                        {article?.title}
+                      </a>
+                    </h3>
+                    <p className="mt-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                      Source: {article?.source}
+                    </p>
+                  </div>
+                ))}
           </div>
         </div>
       </section>
@@ -169,47 +173,7 @@ export default function Home() {
       </section> */}
 
       {/* Footer */}
-      <footer className="bg-[#84670A] text-white py-12">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="flex justify-center space-x-6 mb-8">
-            <Link href="#" className="hover:opacity-80">
-              LinkedIn
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              Twitter
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              Facebook
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              YouTube
-            </Link>
-          </div>
-          <div className="flex justify-center space-x-8 text-sm">
-            <Link href="#" className="hover:opacity-80">
-              About
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              Contact
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              People
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              Privacy & Cookie Statement
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              FAQs
-            </Link>
-            <Link href="#" className="hover:opacity-80">
-              Blogs
-            </Link>
-          </div>
-          <div className="text-center mt-8 text-sm opacity-80">
-            © 2025 IF Chamber
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
