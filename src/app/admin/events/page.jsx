@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function EventsDashboard() {
   const [events, setEvents] = useState([]);
@@ -22,9 +23,35 @@ export default function EventsDashboard() {
     setEvents(data);
   };
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Check file size (max 2MB for base64 conversion)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Image size must be less than 2MB.");
+        return;
+      }
+
+      // Convert image to base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewEvent({ ...newEvent, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleAddEvent = async () => {
+    if (!newEvent.image) {
+      alert("Please upload an image.");
+      return;
+    }
+
     await fetch("/api/events", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(newEvent),
     });
     setNewEvent({
@@ -41,6 +68,9 @@ export default function EventsDashboard() {
   const handleDeleteEvent = async (id) => {
     await fetch("/api/events", {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ id }),
     });
     fetchEvents();
@@ -49,6 +79,9 @@ export default function EventsDashboard() {
   const toggleVisibility = async (id) => {
     await fetch("/api/events/visibility", {
       method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ id }),
     });
     fetchEvents();
@@ -83,12 +116,22 @@ export default function EventsDashboard() {
           className="block w-full border p-2 mt-2"
         />
         <input
-          type="text"
-          placeholder="Image (Base64)"
-          value={newEvent.image}
-          onChange={(e) => setNewEvent({ ...newEvent, image: e.target.value })}
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
           className="block w-full border p-2 mt-2"
         />
+        {newEvent.image && (
+          <div className="mt-2">
+            <Image
+              src={newEvent.image}
+              alt="Uploaded Image Preview"
+              width={100}
+              height={100}
+              className="object-cover"
+            />
+          </div>
+        )}
         <select
           value={newEvent.type}
           onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value })}
@@ -116,6 +159,17 @@ export default function EventsDashboard() {
               <p className="text-gray-500">
                 {new Date(event.date).toLocaleDateString()}
               </p>
+              {event.image && (
+                <div className="mt-2">
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    width={200}
+                    height={200}
+                    className="object-cover"
+                  />
+                </div>
+              )}
             </div>
             <div className="flex gap-2">
               <button
