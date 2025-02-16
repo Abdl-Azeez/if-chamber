@@ -38,7 +38,7 @@ export default function Home() {
       >
         {/* Background Image */}
         <Image
-          src="/hero_bg.jpeg"
+          src="/hero_bg.webp"
           alt="Hero Background"
           layout="fill"
           objectFit="cover"

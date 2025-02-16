@@ -27,7 +27,7 @@ export async function POST(req) {
 
     // Generate JWT Token
     const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "4h",
     });
 
     return NextResponse.json({ token }, { status: 200 });

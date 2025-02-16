@@ -115,7 +115,7 @@ export default function Navbar({ isHome }) {
                 </svg>
               </button>
             </div>
-            <Link href="/contact-us" className={textColorClass}>
+            <Link href="/contact" className={textColorClass}>
               Contact Us
             </Link>
           </div>

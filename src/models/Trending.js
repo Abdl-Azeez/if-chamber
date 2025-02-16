@@ -5,7 +5,7 @@ const TrendingSchema = new mongoose.Schema({
   description: String,
   image: String, // Stored as base64
   position: Number,
-  visible: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 export default mongoose.models.Trending ||
