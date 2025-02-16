@@ -7,8 +7,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = () => {
     // Clear JWT from localStorage or cookies
-    localStorage.removeItem("token"); // If using localStorage
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // If using cookies
+    localStorage.removeItem("token");
 
     // Redirect to login page
     router.push("/admin/login");
@@ -23,7 +22,7 @@ export default function AdminLayout({ children }) {
       router.pathname !== "/admin/signup" &&
       router.pathname !== "/admin/login"
     ) {
-      // router.push("/admin/login");
+      router.push("/admin/login");
     } else if (token) {
       setIsAuthenticated(true);
     }
@@ -33,7 +32,7 @@ export default function AdminLayout({ children }) {
   // else
   return (
     <div>
-      {isAuthenticated &&
+      {
       router.pathname !== "/admin/signup" &&
       router.pathname !== "/admin/login" ? (
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">

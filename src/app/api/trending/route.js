@@ -40,13 +40,15 @@ export async function PUT(req) {
     return Response.json({ message: auth.error }, { status: 401 });
 
   await connectToDatabase();
-  const { id, title, description, image, position } = await req.json();
+  const { id, ...updateData } = await req.json();
 
-  const updatedTrending = await Trending.findByIdAndUpdate(
-    id,
-    { title, description, image, position },
-    { new: true }
-  );
+  if (!id) {
+    return Response.json({ message: "Event ID is required" }, { status: 400 });
+  }
+  
+  const updatedTrending = await Trending.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
 
   if (!updatedTrending) {
     return Response.json(

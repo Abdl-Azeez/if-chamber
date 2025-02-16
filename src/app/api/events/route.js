@@ -5,8 +5,6 @@ import Event from "@/models/Event";
 // 🔹 Fetch events with pagination
 export async function GET(req) {
   const auth = authenticateToken(req);
-  if (auth.error)
-    return Response.json({ message: auth.error }, { status: 401 });
 
   await connectToDatabase();
   const { searchParams } = new URL(req.url);
@@ -27,16 +25,16 @@ export async function POST(req) {
     return Response.json({ message: auth.error }, { status: 401 });
 
   await connectToDatabase();
-  const { title, description, date, location, image } = await req.json();
+  const { title, description, date, image } = await req.json();
 
-  if (!title || !description || !date || !location) {
+  if (!title || !description || !date || !image) {
     return Response.json(
       { message: "All fields are required" },
       { status: 400 }
     );
   }
 
-  const newEvent = new Event({ title, description, date, location, image });
+  const newEvent = new Event({ title, description, date, image });
   await newEvent.save();
 
   return Response.json(
