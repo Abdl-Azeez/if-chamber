@@ -20,7 +20,7 @@ export default function AdminLogin() {
     if (!res.ok) return setError(data.message);
 
     localStorage.setItem("token", data.token);
-    window.location.href = "/admin/dashboard";
+    window.location.href = "/admin";
   };
 
   return (

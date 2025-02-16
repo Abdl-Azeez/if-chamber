@@ -22,14 +22,16 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 gap-6">
         {/* Events Analytics Card */}
         <div className="bg-white p-6 shadow rounded-lg">
-          <h3 className="text-lg font-semibold">Total Events</h3>
-          <p className="text-2xl font-bold">{eventCount}</p>
+          <h3 className="text-lg font-semibold text-black">Total Events</h3>
+          <p className="text-2xl font-bold text-teal-700">{eventCount}</p>
         </div>
 
         {/* Trending Content Analytics Card */}
         <div className="bg-white p-6 shadow rounded-lg">
-          <h3 className="text-lg font-semibold">Total Trending Content</h3>
-          <p className="text-2xl font-bold">{trendingCount}</p>
+          <h3 className="text-lg font-semibold text-black">
+            Total Trending Content
+          </h3>
+          <p className="text-2xl font-bold text-teal-500">{trendingCount}</p>
         </div>
       </div>
 

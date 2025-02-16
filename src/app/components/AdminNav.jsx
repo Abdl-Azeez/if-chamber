@@ -18,10 +18,10 @@ export default function AdminNav({}) {
       <nav className="bg-gray-800 text-white p-4 flex justify-between">
         <div>
           <h2 className="text-xl">Admin Panel</h2>
-          <a href="/dashboard/trending" className="mr-4">
+          <a href="/trending" className="mr-4">
             Trending
           </a>
-          <a href="/dashboard/events">Events</a>
+          <a href="/events">Events</a>
         </div>
         <button onClick={handleLogout} className="text-red-400">
           Logout

@@ -36,13 +36,25 @@ export default function AdminLayout({ children }) {
       {isAuthenticated &&
       router.pathname !== "/admin/signup" &&
       router.pathname !== "/admin/login" ? (
-        <nav className="bg-gray-800 text-white p-4 flex justify-between">
+        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
           <div>
-            <h2 className="text-xl">Admin Panel</h2>
-            <a href="/dashboard/trending" className="mr-4">
+            <a href="/admin" className="text-2xl mb-5">
+              Admin Panel
+            </a>
+          </div>
+          <div>
+            <a
+              href="/admin/trending"
+              className="mr-10 hover:text-blue-300 hover:underline transition-colors duration-500"
+            >
               Trending
             </a>
-            <a href="/dashboard/events">Events</a>
+            <a
+              href="/admin/events"
+              className="hover:text-blue-300 hover:underline transition-colors duration-500"
+            >
+              Events
+            </a>
           </div>
           <button onClick={handleLogout} className="text-red-400">
             Logout
