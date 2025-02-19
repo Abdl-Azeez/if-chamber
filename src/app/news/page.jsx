@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FaHome } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -10,8 +10,13 @@ export default function NewsPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
 
+  const isFetched = useRef(false); // Prevent double fetch in development
+
   useEffect(() => {
-    fetchNews(3, 1); // Fetch initial 3 news items on first load
+    if (isFetched.current) return; // Prevent duplicate calls in Strict Mode
+    isFetched.current = true;
+
+    fetchNews(3, 1);
   }, []);
 
   const fetchNews = async (limit, pageNumber) => {
@@ -36,10 +41,10 @@ export default function NewsPage() {
 
   return (
     <div className="min-h-full flex flex-col bg-white">
-      <Navbar />
+      <Navbar isNews={true} />
       <main className="flex-grow pb-8 min-h-[140vh]">
         {/* Top Section with Home Icon */}
-        <div className="lg:h-80 relative flex justify-center flex-col bg-[#84670A] text-white px-16 pb-16 pt-4 text-center">
+        <div className="lg:h-80 relative flex justify-center flex-col bg-brandGold text-white px-16 pb-16 pt-4 text-center">
           <FaHome className="absolute top-10 left-14 text-xl text-white cursor-pointer hover:opacity-70" />
 
           <h1 className="text-5xl font-bold">Islamic Finance News</h1>
@@ -53,7 +58,7 @@ export default function NewsPage() {
                 .map((_, index) => (
                   <div
                     key={index}
-                    className=" bg-white pb-12 rounded-lg shadow-lg relative overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-t-2 border-[#84670A]"
+                    className=" bg-white pb-12 rounded-lg shadow-lg relative overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-t-2 border-brandGold"
                   >
                     <div className=" p-6">
                       <p className="text-sm text-gray-500">News</p>
@@ -71,7 +76,7 @@ export default function NewsPage() {
                   key={item.link}
                   role="button"
                   tabIndex={0}
-                  className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg relative overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-t-2 border-[#84670A]"
+                  className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg relative overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-t-2 border-brandGold"
                   onClick={() => window.open(item.link, "_blank")}
                   onKeyPress={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -100,7 +105,7 @@ export default function NewsPage() {
           <button
             onClick={handleShowMore}
             disabled={loadingMore}
-            className="bg-[#84670A] text-white py-6 px-8 hover:bg-[#84670CCC] transition-colors duration-300"
+            className="bg-brandGold text-white py-6 px-8 hover:bg-[#84670CCC] transition-colors duration-300"
           >
             {loadingMore ? (
               <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full block"></span>

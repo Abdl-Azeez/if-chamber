@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Navbar from "./components/Navbar";
-import Link from "next/link";
 import TrendingContent from "./components/Trending";
 import Footer from "./components/Footer";
 
@@ -57,7 +56,7 @@ export default function Home() {
             banking, and economic sustainability.
           </p>
           <div className="space-x-4">
-            <button className="bg-[#84670A] text-white px-2 py-2 relative group">
+            <button className="bg-brandGold text-white px-2 py-2 relative group">
               Request Invitation
               <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
             </button>
@@ -70,12 +69,12 @@ export default function Home() {
       </section>
 
       {/* Latest News Section */}
-      <section className="py-16 pl-4 absolute top-[85dvh] right-0 z-20">
+      <section className="pt-16 pb-0 pl-4 absolute top-[81dvh] lg:top-[78dvh] right-0 z-20">
         <div className="flex items-center w-screen overflow-hidden">
-          <h2 className="text-lg font-bold mb-8 w-1/4 pl-16 h-96 flex items-center">
+          <h2 className="text-lg font-bold mb-0 w-1/4 pl-16 h-96 flex items-center">
             LATEST NEWS
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 rounded bg-[#84670A] max-h-96 w-3/4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 rounded bg-brandGold h-96 w-3/4">
             {loading
               ? [0, 1, 2].map((article) => (
                   <div className="news-card text-white py-6 px-6" key={article}>
@@ -89,7 +88,7 @@ export default function Home() {
                 ))
               : news.map((article) => (
                   <div
-                    className="news-card text-white py-6 px-6 relative group transition-all duration-300 ease-in-out transform hover:scale-105"
+                    className="news-card text-white lg:py-6 px-6 sm:py-0 relative group transition-all duration-300 ease-in-out transform hover:scale-105"
                     key={article?.description}
                   >
                     {/* Animated HR */}
@@ -108,7 +107,7 @@ export default function Home() {
                         {article?.title}
                       </a>
                     </h3>
-                    <p className="mt-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="absolute lg:bottom-10 sm:bottom-0 mt-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                       Source: {article?.source}
                     </p>
                   </div>
@@ -166,7 +165,7 @@ export default function Home() {
             Check out latest research in field of Islamic finance and recent
             reviews on IF books
           </p>
-          <Link href="/research" className="text-[#84670A] font-semibold">
+          <Link href="/research" className="text-brandGold font-semibold">
             Check out recent research →
           </Link>
         </div>
