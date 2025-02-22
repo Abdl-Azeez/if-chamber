@@ -9,7 +9,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#84670A] text-white py-14">
+    <footer className="bg-brandGold text-white py-14">
       {/* Social Icons */}
       <div className="flex justify-center gap-6 space-x-6 mb-6 text-2xl">
         <a href="#" className="hover:text-gray-300 transition">

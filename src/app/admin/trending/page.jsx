@@ -7,6 +7,8 @@ export default function ManageTrending() {
      title: "",
      description: "",
      image: "",
+     link: "",
+     linkTitle: "",
      position: "",
    });
    const [message, setMessage] = useState("");
@@ -77,10 +79,13 @@ export default function ManageTrending() {
            ? "Content updated successfully!"
            : "Content added successfully!"
        );
+       console.log(newTrend);
        setNewTrend({
          title: "",
          description: "",
          image: "",
+         link: "",
+         linkTitle: "",
          position: "",
        });
        setEditTrendId(null);
@@ -116,6 +121,13 @@ export default function ManageTrending() {
      setNewTrend(trending);
      setEditTrendId(trending._id);
    };
+
+   useEffect(() => {
+     if (message) {
+       const timer = setTimeout(() => setMessage(""), 3000);
+       return () => clearTimeout(timer);
+     }
+   }, [message]);
 
    return (
      <div className="p-6">
@@ -172,6 +184,22 @@ export default function ManageTrending() {
            </div>
          )}
          <input
+           type="url"
+           placeholder="Link"
+           value={newTrend.link}
+           onChange={(e) => setNewTrend({ ...newTrend, link: e.target.value })}
+           className="w-full p-2 border rounded"
+         />
+         <input
+           type="text"
+           placeholder="Link Title (e.g. Read More)"
+           value={newTrend.linkTitle}
+           onChange={(e) =>
+             setNewTrend({ ...newTrend, linkTitle: e.target.value })
+           }
+           className="w-full p-2 border rounded"
+         />
+         <input
            type="number"
            placeholder="Position"
            value={newTrend.position}
@@ -203,6 +231,8 @@ export default function ManageTrending() {
              <th className="border p-2">Image</th>
              <th className="border p-2">Title</th>
              <th className="border p-2">Description</th>
+             <th className="border p-2">Link</th>
+             <th className="border p-2">Link Title</th>
              <th className="border p-2">Position</th>
              <th className="border p-2">Actions</th>
            </tr>
@@ -221,6 +251,8 @@ export default function ManageTrending() {
                </td>
                <td className="border p-2">{item.title}</td>
                <td className="border p-2">{item.description}</td>
+               <td className="border p-2">{item.link}</td>
+               <td className="border p-2">{item.linkTitle}</td>
                <td className="border p-2">{item.position}</td>
                <td className="border p-2 flex min-h-32 items-center">
                  <button
@@ -231,7 +263,9 @@ export default function ManageTrending() {
                  </button>
                  <button
                    onClick={() => handleDeleteTrend(item._id)}
-                   className="bg-red-500 text-white p-2 rounded ml-2"
+                   className={`bg-red-500 text-white p-2 rounded ml-2 ${
+                     item.position === 1 ? "hidden" : ""
+                   }`}
                  >
                    Delete
                  </button>

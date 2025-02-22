@@ -16,16 +16,26 @@ export async function POST(req) {
   await connectToDatabase();
 
   const existingCount = await Trending.countDocuments();
-  if (existingCount >= 3) {
+  if (existingCount >= 4) {
     return Response.json(
-      { message: "Maximum of 3 trending items allowed." },
+      { message: "Maximum of 4 trending items allowed." },
       { status: 400 }
     );
   }
 
-  const { title, description, image, position } = await req.json();
+  const body = await req.json();
 
-  const newTrending = new Trending({ title, description, image, position });
+  const { title, description, image, link, linkTitle, position } = body;
+
+  const newTrending = new Trending({
+    title,
+    description,
+    image,
+    link: link || "",
+    linkTitle: linkTitle || "",
+    position,
+  });
+
   await newTrending.save();
 
   return Response.json(
@@ -40,15 +50,27 @@ export async function PUT(req) {
     return Response.json({ message: auth.error }, { status: 401 });
 
   await connectToDatabase();
-  const { id, ...updateData } = await req.json();
+  const { id, title, description, image, link, linkTitle, position } =
+    await req.json();
 
   if (!id) {
     return Response.json({ message: "Event ID is required" }, { status: 400 });
   }
-  
-  const updatedTrending = await Trending.findByIdAndUpdate(id, updateData, {
-    new: true,
-  });
+
+  const updatedTrending = await Trending.findByIdAndUpdate(
+    id,
+    {
+      title,
+      description,
+      image,
+      link,
+      linkTitle,
+      position,
+    },
+    {
+      new: true,
+    }
+  );
 
   if (!updatedTrending) {
     return Response.json(

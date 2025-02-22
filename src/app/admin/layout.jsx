@@ -30,11 +30,10 @@ export default function AdminLayout({ children }) {
 
   // if (!isAuthenticated) return null;
   // else
+
   return (
     <div>
-      {
-      router.pathname !== "/admin/signup" &&
-      router.pathname !== "/admin/login" ? (
+      {isAuthenticated ? (
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
           <div>
             <a href="/admin" className="text-2xl mb-5">
@@ -42,6 +41,12 @@ export default function AdminLayout({ children }) {
             </a>
           </div>
           <div>
+            <a
+              href="/admin/logo"
+              className="mr-10 hover:text-blue-300 hover:underline transition-colors duration-500"
+            >
+              Logo
+            </a>
             <a
               href="/admin/trending"
               className="mr-10 hover:text-blue-300 hover:underline transition-colors duration-500"

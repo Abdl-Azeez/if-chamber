@@ -8,7 +8,7 @@ export default function EventsDashboard() {
   const [editEventId, setEditEventId] = useState(null);
   const [message, setMessage] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(2);
+  const [limit] = useState(10);
   const [total, setTotal] = useState(0);
   const [newEvent, setNewEvent] = useState({
     title: "",

@@ -2,11 +2,27 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { getLogos } from "@/utils/getLogos";
+import { useState, useEffect, useRef } from "react";
 
-export default function Navbar({ isHome }) {
+export default function Navbar(props) {
   const [isThoughtLeadershipOpen, setIsThoughtLeadershipOpen] = useState(false);
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
+  const thoughtLeadershipRef = useRef(null);
+  const expertiseRef = useRef(null);
+  const [logos, setLogos] = useState({
+    dashboard: "/logo_pattern.png",
+    site: "/logo.png",
+  });
+
+  useEffect(() => {
+    const fetchLogos = async () => {
+      const fetchedLogos = await getLogos();
+      setLogos(fetchedLogos);
+    };
+    fetchLogos();
+  }, []);
+
   const thoughtLeadership = [
     {
       title: "Thought Leadership",
@@ -44,6 +60,7 @@ export default function Navbar({ isHome }) {
       ],
     },
   ];
+
   const expertise = [
     {
       title: "Shari’ah Advisory & Compliance",
@@ -65,20 +82,57 @@ export default function Navbar({ isHome }) {
     },
   ];
 
-  const textColorClass = isHome
-    ? "text-white hover:text-white"
-    : "text-gray-700 hover:text-gray-900";
+  const textColorClass = props.isHome
+    ? "text-white hover:text-brandGold transition-colors duration-300"
+    : "text-gray-700 hover:text-brandGold transition-colors duration-300";
+
+  const activeColorClass = "text-brandGold"; // Active state color
+
+  // Close submenus on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        thoughtLeadershipRef.current &&
+        !thoughtLeadershipRef.current.contains(event.target)
+      ) {
+        setIsThoughtLeadershipOpen(false);
+      }
+      if (
+        expertiseRef.current &&
+        !expertiseRef.current.contains(event.target)
+      ) {
+        setIsExpertiseOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Close one submenu when the other is opened
+  useEffect(() => {
+    if (isThoughtLeadershipOpen) {
+      setIsExpertiseOpen(false);
+    }
+    if (isExpertiseOpen) {
+      setIsThoughtLeadershipOpen(false);
+    }
+  }, [isThoughtLeadershipOpen, isExpertiseOpen]);
 
   return (
     <nav
-      className={`w-full shadow-sm z-50 ${isHome ? "absolute" : "relative"}`}
+      className={`w-full shadow-sm z-50 ${
+        props.isHome ? "absolute" : "relative"
+      }`}
     >
       {/* Top Row */}
-      <div className="w-full pl-16 pr-4 mx-auto py-4 flex justify-between items-center">
+      <div className="whitespace-nowrap w-full pl-16 pr-4 mx-auto py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center w-1/2">
           <div className="w-40">
             <Image
-              src={isHome ? "/logo_pattern.png" : "/logo.png"}
+              src={props.isHome ? logos.dashboard : logos.site}
               alt="Islamic Finance Logo"
               width={87}
               height={60}
@@ -88,17 +142,32 @@ export default function Navbar({ isHome }) {
         </Link>
         <div className="w-1/2 gap-4 flex flex-col">
           <div className="flex items-center gap-8 text-base justify-end">
-            <Link href="/about" className={textColorClass}>
+            <Link
+              href="/about"
+              className={props.isAbout ? activeColorClass : textColorClass}
+            >
               About
             </Link>
-            <Link href="/events" className={textColorClass}>
+            <Link
+              href="/events"
+              className={props.isEvent ? activeColorClass : textColorClass}
+            >
               Events
             </Link>
-            <Link href="/opportunities" className={textColorClass}>
+            <Link
+              href="/opportunities"
+              className={
+                props.isOpportunity ? activeColorClass : textColorClass
+              }
+            >
               Opportunities
             </Link>
             <div className="relative group">
-              <button className={`${textColorClass} flex items-center gap-1`}>
+              <button
+                className={`${
+                  props.isResources ? activeColorClass : textColorClass
+                } flex items-center gap-1`}
+              >
                 Resources
                 <svg
                   className="w-4 h-4"
@@ -115,22 +184,30 @@ export default function Navbar({ isHome }) {
                 </svg>
               </button>
             </div>
-            <Link href="/contact" className={textColorClass}>
+            <Link
+              href="/contact"
+              className={props.isContact ? activeColorClass : textColorClass}
+            >
               Contact Us
             </Link>
           </div>
           {/* Bottom Row */}
           <div className="container mx-auto px-4 flex justify-end items-center gap-8 text-lg">
-            <div className="">
+            <div className="" ref={thoughtLeadershipRef}>
               <button
-                className={`${textColorClass} flex items-center gap-1`}
+                className={`${
+                  isThoughtLeadershipOpen ? "text-brandGold" : textColorClass
+                } 
+      flex items-center gap-1 transition-colors duration-300`}
                 onClick={() =>
                   setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
                 }
               >
                 Thought Leadership
                 <svg
-                  className="w-4 h-4"
+                  className={`w-4 h-4 transition-transform ${
+                    isThoughtLeadershipOpen ? "rotate-180" : ""
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -179,17 +256,24 @@ export default function Navbar({ isHome }) {
                 </div>
               )}
             </div>
-            <Link href="/news" className={textColorClass}>
+            <Link
+              href="/news"
+              className={props.isNews ? activeColorClass : textColorClass}
+            >
               News
             </Link>
-            <div className="">
+            <div className="" ref={expertiseRef}>
               <button
-                className={`${textColorClass} flex items-center gap-1`}
+                className={`${
+                  isExpertiseOpen ? "text-brandGold" : textColorClass
+                }  flex items-center gap-1`}
                 onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
               >
                 Expertise
                 <svg
-                  className="w-4 h-4"
+                  className={`w-4 h-4 transition-transform ${
+                    isExpertiseOpen ? "rotate-180" : ""
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -203,7 +287,7 @@ export default function Navbar({ isHome }) {
                 </svg>
               </button>
               {isExpertiseOpen && (
-                <div className="px-6 lg:px-12 py-10 absolute w-full bg-white shadow-[inset_0_8px_15px_rgba(0,0,0,0.2)] z-50 left-0 top-full">
+                <div className="whitespace-normal px-6 lg:px-12 py-10 absolute w-full bg-white shadow-[inset_0_8px_15px_rgba(0,0,0,0.2)] z-50 left-0 top-full">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
                     {expertise.map((th, index) => (
                       <div key={th.title} className="space-y-3">
@@ -231,14 +315,19 @@ export default function Navbar({ isHome }) {
                 </div>
               )}
             </div>
-            <Link href="/expert-community" className={textColorClass}>
+            <Link
+              href="/expert-community"
+              className={
+                props.isExpertCommunity ? activeColorClass : textColorClass
+              }
+            >
               Expert Community
             </Link>
             <button className="p-2">
               <svg
                 className="w-6 h-6"
                 fill="none"
-                stroke="currentColor"
+                stroke={props.isHome ? "white" : "black"}
                 viewBox="0 0 24 24"
               >
                 <path

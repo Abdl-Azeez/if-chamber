@@ -3,23 +3,35 @@ import Image from "next/image";
 import { FaHome, FaWhatsapp } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { getLogos } from "@/utils/getLogos";
+import { useEffect, useState } from "react";
 
 export default function AboutPage() {
+  const [siteLogo, setSiteLogo] = useState("/logo.png"); // Default fallback
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      const logos = await getLogos();
+      setSiteLogo(logos.site); // Only update site logo
+    };
+    fetchLogo();
+  }, []);
+
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
+      <Navbar isAbout={true} />
 
       {/* Top Section with Home Icon */}
-      <div className="px-14 relative lg:px-16 py-4 flex items-center bg-[#84670A] justify-start">
+      <div className="px-14 relative lg:px-16 py-4 flex items-center bg-brandGold justify-start">
         <FaHome className="mr-5 text-xl text-white cursor-pointer hover:opacity-70" />
         <span className="text-white text-sm font-medium">About Us</span>
       </div>
 
       {/* Logo Section */}
       <div className="flex justify-center py-12">
-        <div className="relative w-72 h-72 md:w-72 md:h-72 rounded-full border-[40px] border-[#84670A] flex items-center justify-center">
+        <div className="relative w-72 h-72 md:w-72 md:h-72 rounded-full border-[40px] border-brandGold flex items-center justify-center">
           <Image
-            src="/logo.png"
+            src={siteLogo}
             alt="IFChamber Logo"
             width={200}
             height={200}
