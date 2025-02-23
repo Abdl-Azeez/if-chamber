@@ -6,6 +6,7 @@ import { getLogos } from "@/utils/getLogos";
 import { useState, useEffect, useRef } from "react";
 
 export default function Navbar(props) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isThoughtLeadershipOpen, setIsThoughtLeadershipOpen] = useState(false);
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
   const thoughtLeadershipRef = useRef(null);
@@ -123,25 +124,50 @@ export default function Navbar(props) {
 
   return (
     <nav
-      className={`w-full shadow-sm z-50 ${
+      className={`md:w-full w-screen shadow-sm z-50 ${
         props.isHome ? "absolute" : "relative"
-      }`}
+      } ${isMobileMenuOpen ? "bg-white" : "bg-transparent"}`}
     >
       {/* Top Row */}
-      <div className="whitespace-nowrap w-full pl-16 pr-4 mx-auto py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center w-1/2">
+      <div className="whitespace-nowrap w-full pl-4 md:pl-16 pr-4 mx-auto py-4 flex md:justify-between items-center">
+        {/* Hamburger Menu */}
+        <button
+          className={`block md:hidden w-1/12 ${
+            isMobileMenuOpen ? "text-brandGold" : "text-white"
+          } hover:text-brandGold transition-colors duration-300`}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+        <Link
+          href="/"
+          className="flex items-center md:w-1/2 w-11/12 justify-center md:justify-start mr-12 md:mr-0"
+        >
           <div className="w-40">
             <Image
               src={props.isHome ? logos.dashboard : logos.site}
               alt="Islamic Finance Logo"
               width={87}
               height={60}
+              className="w-16 h-16 md:min-w-[87px] md:min-h-[60px] lg:min-w-[87px] lg:min-h-[60px] mx-auto my-0 md:mx-0"
               priority
             />
           </div>
         </Link>
-        <div className="w-1/2 gap-4 flex flex-col">
-          <div className="flex items-center gap-8 text-base justify-end">
+        <div className="w-1/2 gap-4 md:flex flex-col hidden">
+          <div className="hidden md:flex items-center gap-8 text-base justify-end">
             <Link
               href="/about"
               className={props.isAbout ? activeColorClass : textColorClass}
@@ -341,6 +367,120 @@ export default function Navbar(props) {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="block md:hidden bg-white shadow-lg text-black max-w-screen-sm">
+          <div className="flex items-center bg-gray-200 px-4 py-2">
+            <input
+              type="text"
+              placeholder="How Can we Help?"
+              className="bg-gray-200 text-gray-600 w-full border-none focus:outline-none"
+            />
+            <svg
+              className="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="8" strokeWidth="2" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" strokeWidth="2" />
+            </svg>
+          </div>
+
+          <ul className="space-y-0 border-t">
+            <li className="border-b">
+              <button
+                className="w-full text-left flex justify-between items-center px-4 py-3"
+                onClick={() =>
+                  setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
+                }
+              >
+                Thought Leadership
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    isThoughtLeadershipOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {isThoughtLeadershipOpen && (
+                <ul className="pl-8 space-y-2 text-gray-600">
+                  <li>Islamic Finance and AI</li>
+                  <li>Blockchain's Future</li>
+                  <li>Case Study</li>
+                  <li>Podcast</li>
+                  <li>Research</li>
+                </ul>
+              )}
+            </li>
+            <li className="border-b">
+              <Link href="/news" className="block px-4 py-3 text-left">
+                News
+              </Link>
+            </li>
+            <li className="border-b">
+              <button
+                className="w-full text-left flex justify-between items-center px-4 py-3"
+                onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
+              >
+                Expertise
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    isExpertiseOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {isExpertiseOpen && (
+                <ul className="pl-8 space-y-2 text-gray-600">
+                  <li>Shari’ah Advisory & Compliance</li>
+                  <li>Training & Capacity Building</li>
+                  <li>Finance Consulting</li>
+                </ul>
+              )}
+            </li>
+            <li className="border-b">
+              <Link href="/community" className="block px-4 py-3 text-left">
+                Expert Community
+              </Link>
+            </li>
+            <li className="border-b">
+              <Link href="/about" className="block px-4 py-3 text-left">
+                About
+              </Link>
+            </li>
+            <li className="border-b">
+              <Link href="/events" className="block px-4 py-3 text-left">
+                Events
+              </Link>
+            </li>
+            <li className="border-b">
+              <Link href="/contact" className="block px-4 py-3 text-left">
+                Contact Us
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

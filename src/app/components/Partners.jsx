@@ -1,54 +1,76 @@
 "use client";
 
-import { useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react"; // install swiper
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+import Slider from "react-slick";
 import Image from "next/image";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useRef } from "react";
 
-export default function Partners() {
-  const partners = [
-    { id: 1, name: "say", logo: "/partner_sayafrica.png" },
-    { id: 2, name: "IFC", logo: "/partner_ifc.png" },
-    { id: 3, name: "LIFR", logo: "/partner_lifr.png" },
-    // { id: 4, name: "LIFR", logo: "/partner_lifr.png" },
-    // { id: 5, name: "LIFR", logo: "/partner_lifr.png" },
-  ];
+const partners = [
+  { id: 1, src: "/partner_sayafrica.png", alt: "Say Africa" },
+  { id: 2, src: "/partner_lifr.png", alt: "Islamic Finance Review" },
+  { id: 3, src: "/partner_ifc.png", alt: "Islamic Finance Connect" },
+];
+
+export default function PartnersSlider() {
+  const sliderRef = useRef(null);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 1024, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
+    ],
+  };
 
   return (
-    <div className="bg-gray-100 py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-8">Our Partners</h2>
-        <Swiper
-          slidesPerView={3}
-          spaceBetween={30}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: false,
-          }}
-          navigation={true}
-          modules={[Autoplay, Navigation]}
-          className="mySwiper"
+    <div className="pt-10 bg-white pb-36">
+      <h2 className="text-center text-2xl font-semibold text-gray-700">
+        Our Partners
+      </h2>
+      <div className="w-20 border-t-2 border-brandGold mx-auto my-5"></div>
+
+      <div className="relative w-5/6 mx-auto h-full py-36">
+        {/* Left Arrow */}
+        <button
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent text-brandGold p-2 text-2xl z-10"
+          onClick={() => sliderRef.current.slickPrev()}
         >
+          <FaChevronLeft />
+        </button>
+
+        {/* Slider */}
+        <Slider ref={sliderRef} {...settings} className="px-8 w-full">
           {partners.map((partner) => (
-            <SwiperSlide key={partner.id}>
-              <div className="flex items-center justify-center">
-                <Image
-                  src={partner.logo}
-                  alt={partner.name}
-                  width={150}
-                  height={100}
-                  className="object-contain"
-                />
-              </div>
-            </SwiperSlide>
+            <div
+              key={partner.id}
+              style={{ display: "flex !important" }}
+              className="!flex justify-center items-center"
+            >
+              <Image
+                src={partner.src}
+                alt={partner.alt}
+                width={200}
+                height={100}
+                className="object-contain"
+              />
+            </div>
           ))}
-        </Swiper>
+        </Slider>
+
+        {/* Right Arrow */}
+        <button
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent text-brandGold p-2 text-2xl z-10"
+          onClick={() => sliderRef.current.slickNext()}
+        >
+          <FaChevronRight />
+        </button>
       </div>
     </div>
   );

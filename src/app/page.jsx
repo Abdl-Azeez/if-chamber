@@ -34,7 +34,7 @@ export default function Home() {
       <section
         className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
           imageLoaded ? "bg-transparent" : "bg-blue-500"
-        } h-[120vh] w-full`} // Apply height to the section
+        } h-[120vh] w-full`}
       >
         {/* Background Image */}
         <Image
@@ -42,26 +42,25 @@ export default function Home() {
           alt="Hero Background"
           layout="fill"
           objectFit="cover"
-          // className="z-[-1]"
           priority
           onLoad={() => setImageLoaded(true)}
         />
-        <div className="pl-12 max-w-6xl relative z-10 mb-20">
-          <h1 className="text-6xl font-bold mb-4">
+        <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
             Empowering Ethical Finance
             <br />
             and Islamic Growth
           </h1>
-          <p className="text-xl mb-8 max-w-2xl">
+          <p className="text-lg md:text-xl mb-8 max-w-2xl">
             Dedicated to promoting the principles of Islamic finance, ethical
             banking, and economic sustainability.
           </p>
-          <div className="space-x-4">
+          <div className="space-x-2 md:space-x-4">
             <button className="bg-brandGold text-white px-2 py-2 relative group">
               Request Invitation
               <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
             </button>
-            <button className="bg-[#025F1CCC] hover:bg-[#025F1E] text-white px-2 py-2 ml-6 relative group">
+            <button className="bg-[#025F1CCC] hover:bg-[#025F1E] text-white px-2 py-2 relative group">
               View Charter
               <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
             </button>
@@ -70,49 +69,52 @@ export default function Home() {
       </section>
 
       {/* Latest News Section */}
-      <section className="pt-16 pb-0 pl-4 absolute top-[81dvh] lg:top-[78dvh] right-0 z-20">
-        <div className="flex items-center w-screen overflow-hidden">
-          <h2 className="text-lg font-bold mb-0 w-1/4 pl-16 h-96 flex items-center">
-            LATEST NEWS
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 rounded bg-brandGold h-96 w-3/4">
-            {loading
-              ? [0, 1, 2].map((article) => (
-                  <div className="news-card text-white py-6 px-6" key={article}>
-                    <hr className="border-t-2 my-6 rounded" />
-                    <span className="text-sm mb-2">News</span>
-                    <h3 className="text-xl font-semibold mt-2 h-40 italic w-1/3">
-                      Loading Latest News...
-                    </h3>
-                    <em className="mt-4 text-sm">Source: Loading___</em>
-                  </div>
-                ))
-              : news.map((article) => (
-                  <div
-                    className="news-card text-white lg:py-6 px-6 sm:py-0 relative group transition-all duration-300 ease-in-out transform hover:scale-105"
-                    key={article?.description}
-                  >
-                    {/* Animated HR */}
-                    <hr className="border-t-2 my-6 rounded w-full group-hover:w-0 transition-all duration-500 ease-in-out" />
-                    {/* News Content */}
-                    <span className="text-sm mb-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                      News
-                    </span>
-                    <h3 className="text-xl font-semibold mt-2 line-clamp-6 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-                      <a
-                        href={article?.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:underline"
-                      >
-                        {article?.title}
-                      </a>
-                    </h3>
-                    <p className="absolute lg:bottom-10 sm:bottom-0 mt-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                      Source: {article?.source}
-                    </p>
-                  </div>
-                ))}
+      <section className="pt-16 pb-0 pl-0 md:pl-4 absolute top-[81dvh] lg:top-[78dvh] right-0 z-20 w-full">
+        <div className="w-full overflow-x-auto scrollbar-hide">
+          <div className="flex items-center space-x-4 min-w-[600px]">
+            <h2 className="hidden md:flex text-lg font-bold mb-0 flex-shrink-0 w-[30%] pl-4 h-96 items-center">
+              LATEST NEWS
+            </h2>
+            <div className="flex space-x-4 h-96 w-full md:w-[70%]">
+              {loading
+                ? [0, 1, 2].map((article) => (
+                    <div
+                      className="news-card w-2/3 md:w-1/3 text-white py-6 px-6 flex-shrink-0 bg-brandGold rounded"
+                      key={article}
+                    >
+                      <hr className="border-t-2 my-6 rounded" />
+                      <span className="text-sm mb-2">News</span>
+                      <h3 className="text-xl font-semibold mt-2 h-40 italic">
+                        Loading Latest News...
+                      </h3>
+                      <em className="mt-4 text-sm">Source: Loading___</em>
+                    </div>
+                  ))
+                : news.map((article) => (
+                    <div
+                      className="news-card w-3/6 md:w-1/3 text-white py-6 px-6 flex-shrink-0 bg-brandGold rounded relative group transition-all duration-300 ease-in-out transform hover:scale-105"
+                      key={article?.description}
+                    >
+                      <hr className="border-t-2 my-6 rounded w-full group-hover:w-0 transition-all duration-500 ease-in-out" />
+                      <span className="text-sm mb-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                        News
+                      </span>
+                      <h3 className="text-lg font-semibold mt-2 line-clamp-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+                        <a
+                          href={article?.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          {article?.title}
+                        </a>
+                      </h3>
+                      <p className="absolute bottom-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                        Source: {article?.source}
+                      </p>
+                    </div>
+                  ))}
+            </div>
           </div>
         </div>
       </section>
