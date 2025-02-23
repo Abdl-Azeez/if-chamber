@@ -4,6 +4,7 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import TrendingContent from "./components/Trending";
 import Footer from "./components/Footer";
+import Partners from "./components/Partners";
 
 export default function Home() {
   const [news, setNews] = useState([]);
@@ -170,6 +171,8 @@ export default function Home() {
           </Link>
         </div>
       </section> */}
+
+      <Partners />
 
       {/* Footer */}
       <Footer />
