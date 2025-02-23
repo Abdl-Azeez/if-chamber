@@ -17,7 +17,7 @@ export default function TrendingContent() {
   };
   return (
     <div
-      className="min-h-screen mt-16 lg:mt-8 w-screen"
+      className="min-h-auto md:min-h-screen mt-16 lg:mt-8 w-screen"
       style={{
         backgroundImage: hoveredContent
           ? `url(${hoveredContent.image})`
@@ -27,14 +27,14 @@ export default function TrendingContent() {
         transition: "background-image 0.5s ease-in-out",
       }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-screen relative">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-auto md:h-screen relative">
         {/* Low Opacity Black Overlay for Background */}
         <div className="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
 
         {/* Static Title Section (First item from backend) */}
         {trendingContents.length > 0 && (
-          <div className="flex items-end justify-center p-8 border-r-2 border-b-2 border-gray-300 relative z-10">
-            <h1 className="text-6xl font-bold text-white rounded-lg">
+          <div className="flex items-end justify-center p-16 md:p-8 md:border-r-2 border-b-2 border-gray-300 relative z-10">
+            <h1 className="text-4xl lg:text-6xl font-bold text-white rounded-lg">
               {trendingContents[0].title}
             </h1>
           </div>
@@ -44,11 +44,11 @@ export default function TrendingContent() {
         {trendingContents.slice(1).map((content, index) => (
           <div
             key={content._id}
-            className={`relative p-8 flex items-end justify-end cursor-pointer ${
+            className={` relative p-16 md:p-8 flex items-end justify-end cursor-not-allowed md:cursor-pointer transition-all duration-300 ${
               index === 0
-                ? "border-b-2 border-r-2 border-gray-300"
+                ? "border-b-2 md:border-b-2 md:border-r-2 border-gray-300"
                 : index === 1
-                ? "border-r-2 border-gray-300"
+                ? "border-b-2 md:border-r-2 border-gray-300"
                 : ""
             } relative z-10`}
             onMouseEnter={() => setHoveredContent(content)}
@@ -67,23 +67,25 @@ export default function TrendingContent() {
                   : "opacity-100"
               }`}
             >
-              <h2 className="text-2xl text-white rounded-lg transition-transform transform hover:scale-105">
+              <h2 className="text-center md:text-right text-xl md:text-2xl text-white rounded-lg transition-transform transform hover:scale-105">
                 {content.title}
               </h2>
             </div>
             <a href={content?.link} target="_blank" rel="noopener noreferrer">
               {/* Content Details on hover */}
               <div
-                className={`absolute inset-0 p-8 flex flex-col justify-center transition-opacity duration-300 ${
+                className={`absolute inset-0 p-4 md:p-8 flex flex-col justify-center transition-opacity duration-300 ${
                   hoveredContent?._id === content._id
                     ? "opacity-100"
                     : "opacity-0"
                 }`}
               >
-                <div className="text-4xl text-white font-semibold">
+                <div className="text-3xl md:text-4xl text-white font-semibold">
                   {content.title}
                 </div>
-                <div className="text-white mt-4">{content.description}</div>
+                <div className="text-white mt-4 hidden md:block">
+                  {content.description}
+                </div>
                 <div className="mt-8 group cursor-pointer">
                   <span className="text-white underline transition-all duration-300 transform group-hover:scale-105">
                     {content.linkTitle}&nbsp;
