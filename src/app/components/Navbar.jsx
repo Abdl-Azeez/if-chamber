@@ -133,7 +133,11 @@ export default function Navbar(props) {
         {/* Hamburger Menu */}
         <button
           className={`block md:hidden w-1/12 ${
-            isMobileMenuOpen ? "text-brandGold" : "text-white"
+            isMobileMenuOpen && props.isHome
+              ? "text-brandGold"
+                ? isMobileMenuOpen && !props.isHome
+                : "text-black"
+              : "text-gray-800"
           } hover:text-brandGold transition-colors duration-300`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
@@ -183,7 +187,7 @@ export default function Navbar(props) {
             <Link
               href="/opportunities"
               className={
-                props.isOpportunity ? activeColorClass : textColorClass
+                props.isOpportunities ? activeColorClass : textColorClass
               }
             >
               Opportunities
@@ -391,7 +395,9 @@ export default function Navbar(props) {
           <ul className="space-y-0 border-t">
             <li className="border-b">
               <button
-                className="w-full text-left flex justify-between items-center px-4 py-3"
+                className={`w-full text-left flex justify-between items-center px-4 py-3 ${
+                  isThoughtLeadershipOpen ? "text-brandGold" : textColorClass
+                }`}
                 onClick={() =>
                   setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
                 }
@@ -404,6 +410,9 @@ export default function Navbar(props) {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  onClick={() =>
+                    setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
+                  }
                 >
                   <path
                     strokeLinecap="round"
@@ -424,13 +433,20 @@ export default function Navbar(props) {
               )}
             </li>
             <li className="border-b">
-              <Link href="/news" className="block px-4 py-3 text-left">
+              <Link
+                href="/news"
+                className={`block px-4 py-3 text-left ${
+                  props.isNews ? activeColorClass : textColorClass
+                }`}
+              >
                 News
               </Link>
             </li>
             <li className="border-b">
               <button
-                className="w-full text-left flex justify-between items-center px-4 py-3"
+                className={`w-full text-left flex justify-between items-center px-4 py-3 ${
+                  isExpertiseOpen ? "text-brandGold" : textColorClass
+                }`}
                 onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
               >
                 Expertise
@@ -441,6 +457,7 @@ export default function Navbar(props) {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
                 >
                   <path
                     strokeLinecap="round"
@@ -459,22 +476,42 @@ export default function Navbar(props) {
               )}
             </li>
             <li className="border-b">
-              <Link href="/community" className="block px-4 py-3 text-left">
+              <Link
+                href="/community"
+                className={`block px-4 py-3 text-left ${
+                  props.isExpertCommunity ? activeColorClass : textColorClass
+                }`}
+              >
                 Expert Community
               </Link>
             </li>
             <li className="border-b">
-              <Link href="/about" className="block px-4 py-3 text-left">
+              <Link
+                href="/about"
+                className={`block px-4 py-3 text-left ${
+                  props.isAbout ? activeColorClass : textColorClass
+                }`}
+              >
                 About
               </Link>
             </li>
             <li className="border-b">
-              <Link href="/events" className="block px-4 py-3 text-left">
+              <Link
+                href="/events"
+                className={`block px-4 py-3 text-left ${
+                  props.isEvent ? activeColorClass : textColorClass
+                }`}
+              >
                 Events
               </Link>
             </li>
             <li className="border-b">
-              <Link href="/contact" className="block px-4 py-3 text-left">
+              <Link
+                href="/contact"
+                className={`block px-4 py-3 text-left ${
+                  props.isContact ? activeColorClass : textColorClass
+                }`}
+              >
                 Contact Us
               </Link>
             </li>
