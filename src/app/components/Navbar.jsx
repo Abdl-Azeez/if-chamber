@@ -477,7 +477,7 @@ export default function Navbar(props) {
             </li>
             <li className="border-b">
               <Link
-                href="/community"
+                href="/expert-community"
                 className={`block px-4 py-3 text-left ${
                   props.isExpertCommunity ? activeColorClass : textColorClass
                 }`}

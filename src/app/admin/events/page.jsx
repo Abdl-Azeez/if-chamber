@@ -177,7 +177,7 @@ export default function EventsDashboard() {
           placeholder="Title"
           value={newEvent.title}
           onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-          className="block w-full border p-2 mt-2 text-black rounded"
+          className="block w-full border p-2 mt-2 text-black rounded mb-2"
           required
         />
         {/* <textarea
@@ -198,7 +198,7 @@ export default function EventsDashboard() {
           generateMarkdownPreview={(markdown) =>
             Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
           }
-          className="mt-2 text-black"
+          className="mt-2 text-black h-60"
         />
         <input
           type="date"
