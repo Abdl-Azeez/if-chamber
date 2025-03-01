@@ -44,3 +44,12 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.mde-text, .mde-tabs{
+  color: #000 !important;
+}
+
+.mde-tabs button{
+  border: 2px solid #000;
+  border-radius: 5px;
+}

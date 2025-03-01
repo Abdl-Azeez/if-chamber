@@ -34,7 +34,7 @@ export default function Footer() {
       <hr className="border-t border-white opacity-50 w-11/12 mx-auto mb-6" />
 
       {/* Footer Links */}
-      <div className="flex justify-center space-x-4 text-sm mb-6">
+      <div className="flex justify-center space-x-4 text-sm mb-6 px-5 md:px-0">
         <a href="#" className="hover:underline hover:text-gray-300 transition">
           About
         </a>

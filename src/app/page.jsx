@@ -45,7 +45,7 @@ export default function Home() {
           priority
           onLoad={() => setImageLoaded(true)}
         />
-        <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20">
+        <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-16">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
             Empowering Ethical Finance
             <br />

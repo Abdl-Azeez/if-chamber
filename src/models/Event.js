@@ -6,6 +6,8 @@ const EventSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   image: { type: String }, // Base64-encoded image
   visible: { type: Boolean, default: true },
+  theme: { type: String, required: "false" },
+  season: { type: String, required: "false" },
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import ReactMde from "react-mde";
+import "react-mde/lib/styles/css/react-mde-all.css";
+import ReactMarkdown from "react-markdown";
 
 export default function EventsDashboard() {
   const [events, setEvents] = useState([]);
@@ -10,12 +13,16 @@ export default function EventsDashboard() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [total, setTotal] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("write");
+  
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
     date: "",
     image: "",
     visible: true,
+    theme: "",
+    season: "",
   });
 
   const fetchEvents = async () => {
@@ -85,6 +92,8 @@ export default function EventsDashboard() {
           date: "",
           image: "",
           visible: true,
+          theme: "",
+          season: "",
         });
         setEditEventId(null);
         fetchEvents();
@@ -168,10 +177,10 @@ export default function EventsDashboard() {
           placeholder="Title"
           value={newEvent.title}
           onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-          className="block w-full border p-2 mt-2 text-black rounded"
+          className="block w-full border p-2 mt-2 text-black rounded mb-2"
           required
         />
-        <textarea
+        {/* <textarea
           placeholder="Description"
           value={newEvent.description}
           onChange={(e) =>
@@ -179,6 +188,17 @@ export default function EventsDashboard() {
           }
           className="block w-full border p-2 mt-2 text-black rounded"
           required
+        /> */}
+        {/* ReactMde Markdown Editor */}
+        <ReactMde
+          value={newEvent.description}
+          onChange={(value) => setNewEvent({ ...newEvent, description: value })}
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+          generateMarkdownPreview={(markdown) =>
+            Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+          }
+          className="mt-2 text-black h-60"
         />
         <input
           type="date"
@@ -186,6 +206,20 @@ export default function EventsDashboard() {
           onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
           className="block w-full border p-2 mt-2 text-black rounded"
           required
+        />
+        <input
+          type="text"
+          placeholder="Example: What's Up Islamic Finance (optional)"
+          value={newEvent.theme}
+          onChange={(e) => setNewEvent({ ...newEvent, theme: e.target.value })}
+          className="block w-full border p-2 mt-2 text-black rounded"
+        />
+        <input
+          type="text"
+          placeholder="Example: Ramadam 2025 (optional)"
+          value={newEvent.season}
+          onChange={(e) => setNewEvent({ ...newEvent, season: e.target.value })}
+          className="block w-full border p-2 mt-2 text-black rounded"
         />
         <input
           type="file"
@@ -234,6 +268,8 @@ export default function EventsDashboard() {
           <tr className="bg-gray-800 text-white">
             <th className="border p-2">Image</th>
             <th className="border p-2">Title</th>
+            <th className="border p-2">Theme</th>
+            <th className="border p-2">Season</th>
             <th className="border p-2">Date</th>
             <th className="border p-2">Period</th>
             <th className="border p-2">Actions</th>
@@ -252,6 +288,12 @@ export default function EventsDashboard() {
                 />
               </td>
               <td className="border p-2">{event.title}</td>
+              <td className="border p-2">
+                {event?.theme ? event.theme : "----"}
+              </td>
+              <td className="border p-2">
+                {event?.season ? event.season : "-----"}
+              </td>
               <td className="border p-2">
                 {new Date(event.date).toLocaleDateString()}
               </td>
