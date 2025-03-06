@@ -125,6 +125,7 @@ export default function Navbar(props) {
     }
   }, [isThoughtLeadershipOpen, isExpertiseOpen]);
 
+
   return (
     <nav
       className={`md:w-full w-screen shadow-sm z-50 ${
@@ -413,9 +414,6 @@ export default function Navbar(props) {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  onClick={() =>
-                    setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
-                  }
                 >
                   <path
                     strokeLinecap="round"
