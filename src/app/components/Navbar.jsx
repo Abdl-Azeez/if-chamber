@@ -168,7 +168,7 @@ export default function Navbar(props) {
               alt="Islamic Finance Logo"
               width={87}
               height={60}
-              className="w-16 h-16 md:min-w-[87px] md:min-h-[60px] lg:min-w-[87px] lg:min-h-[60px] mx-auto my-0 md:mx-0"
+              className="w-16 h-16 md:min-w-[87px] md:min-h-[65px] lg:min-w-[90px] lg:min-h-[80px] mx-auto my-0 md:mx-0"
               priority
             />
           </div>

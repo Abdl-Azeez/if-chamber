@@ -50,7 +50,13 @@ export default function HeroAdmin() {
       await fetch("/api/hero", {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(form._id ? { id: form._id, ...form } : form),
+      });
+      setForm({
+        title: "",
+        description: "",
+        image: "",
+        buttons: [],
       });
       fetchHeroes();
     } catch (err) {
@@ -73,9 +79,10 @@ export default function HeroAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-      router.reload();
+      fetchHeroes();
     } catch (err) {
-      setError("Failed to delete hero section");
+      setError("Failed to delete hero section", err);
+      fetchHeroes();
     } finally {
       setLoading(false);
     }
