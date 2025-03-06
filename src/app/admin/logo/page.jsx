@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import AdminNav from "@/app/components/AdminNav";
 
 export default function ManageLogo() {
   const [logos, setLogos] = useState({ dashboard: null, site: null });
@@ -78,81 +79,84 @@ export default function ManageLogo() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold">Manage Logos</h2>
-      {message && (
-        <p
-          className={`mt-2 ${
-            message.includes("Error") ? "text-red-500" : "text-green-500"
-          }`}
-        >
-          {message}
-        </p>
-      )}
-
-      {["dashboard", "site"].map((type) => (
-        <div key={type} className="mt-6">
-          <h3 className="text-xl font-bold">
-            {type.charAt(0).toUpperCase() + type.slice(1)} Logo
-          </h3>
-          <form
-            onSubmit={(e) => handleSubmit(e, type)}
-            className="mt-4 space-y-2"
+    <div className="min-h-screen bg-gray-100 text-black">
+      <AdminNav active="logo" />
+      <main className="p-6 max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold">Manage Logos</h2>
+        {message && (
+          <p
+            className={`mt-2 ${
+              message.includes("Error") ? "text-red-500" : "text-green-500"
+            }`}
           >
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, type)}
-              className="w-full p-2 border rounded"
-              required
-            />
-            {images[type] && (
-              <div className="mt-2">
+            {message}
+          </p>
+        )}
+
+        {["dashboard", "site"].map((type) => (
+          <div key={type} className="mt-6">
+            <h3 className="text-xl font-bold">
+              {type.charAt(0).toUpperCase() + type.slice(1)} Logo
+            </h3>
+            <form
+              onSubmit={(e) => handleSubmit(e, type)}
+              className="mt-4 space-y-2"
+            >
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, type)}
+                className="w-full p-2 border rounded"
+                required
+              />
+              {images[type] && (
+                <div className="mt-2">
+                  <Image
+                    src={images[type]}
+                    alt={`${type} Logo Preview`}
+                    width={150}
+                    height={150}
+                    className="rounded"
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                disabled={loading}
+              >
+                {loading
+                  ? "Saving..."
+                  : logos[type]
+                  ? "Update Logo"
+                  : "Upload Logo"}
+              </button>
+            </form>
+
+            {logos[type] && (
+              <div className="mt-6">
+                <h4 className="text-lg font-bold">
+                  Current {type.charAt(0).toUpperCase() + type.slice(1)} Logo
+                </h4>
                 <Image
-                  src={images[type]}
-                  alt={`${type} Logo Preview`}
+                  src={logos[type].image}
+                  alt={`Current ${type} Logo`}
                   width={150}
                   height={150}
                   className="rounded"
                 />
+                <button
+                  onClick={() => handleDelete(type)}
+                  className="bg-red-500 text-white p-2 rounded mt-2 hover:bg-red-600"
+                  disabled={loading}
+                >
+                  {loading ? "Deleting..." : "Delete Logo"}
+                </button>
               </div>
             )}
-            <button
-              type="submit"
-              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-              disabled={loading}
-            >
-              {loading
-                ? "Saving..."
-                : logos[type]
-                ? "Update Logo"
-                : "Upload Logo"}
-            </button>
-          </form>
-
-          {logos[type] && (
-            <div className="mt-6">
-              <h4 className="text-lg font-bold">
-                Current {type.charAt(0).toUpperCase() + type.slice(1)} Logo
-              </h4>
-              <Image
-                src={logos[type].image}
-                alt={`Current ${type} Logo`}
-                width={150}
-                height={150}
-                className="rounded"
-              />
-              <button
-                onClick={() => handleDelete(type)}
-                className="bg-red-500 text-white p-2 rounded mt-2 hover:bg-red-600"
-                disabled={loading}
-              >
-                {loading ? "Deleting..." : "Delete Logo"}
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
+          </div>
+        ))}
+      </main>
     </div>
   );
 }

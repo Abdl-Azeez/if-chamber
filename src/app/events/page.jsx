@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+// TODO:
+// 1. Show Message if no events
 export default function EventsPage() {
   const [events, setEvents] = useState({ past: [], upcoming: [] });
   const [activeTab, setActiveTab] = useState("upcoming");

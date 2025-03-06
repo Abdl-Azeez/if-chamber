@@ -83,9 +83,12 @@ export default function Navbar(props) {
     },
   ];
 
-  const textColorClass = props.isHome
-    ? "text-white hover:text-brandGold transition-colors duration-300"
-    : "text-gray-700 hover:text-brandGold transition-colors duration-300";
+  const textColorClass =
+    props.isHome && !isMobileMenuOpen
+      ? "text-white hover:text-brandGold transition-colors duration-300"
+      : props.isHome && isMobileMenuOpen
+      ? "text-black hover:text-brandGold transition-colors duration-300"
+      : "text-gray-700 hover:text-brandGold transition-colors duration-300";
 
   const activeColorClass = "text-brandGold"; // Active state color
 
@@ -121,6 +124,7 @@ export default function Navbar(props) {
       setIsThoughtLeadershipOpen(false);
     }
   }, [isThoughtLeadershipOpen, isExpertiseOpen]);
+
 
   return (
     <nav
@@ -165,7 +169,7 @@ export default function Navbar(props) {
               alt="Islamic Finance Logo"
               width={87}
               height={60}
-              className="w-16 h-16 md:min-w-[87px] md:min-h-[60px] lg:min-w-[87px] lg:min-h-[60px] mx-auto my-0 md:mx-0"
+              className="w-16 h-16 md:min-w-[87px] md:min-h-[65px] lg:min-w-[90px] lg:min-h-[80px] mx-auto my-0 md:mx-0"
               priority
             />
           </div>
@@ -410,9 +414,6 @@ export default function Navbar(props) {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  onClick={() =>
-                    setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
-                  }
                 >
                   <path
                     strokeLinecap="round"

@@ -4,6 +4,7 @@ import Image from "next/image";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import ReactMarkdown from "react-markdown";
+import AdminNav from "@/app/components/AdminNav";
 
 export default function EventsDashboard() {
   const [events, setEvents] = useState([]);
@@ -14,7 +15,7 @@ export default function EventsDashboard() {
   const [limit] = useState(10);
   const [total, setTotal] = useState(0);
   const [selectedTab, setSelectedTab] = useState("write");
-  
+
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
@@ -35,8 +36,8 @@ export default function EventsDashboard() {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        setMessage("Error: Image size must be less than 2MB.");
+      if (file.size > 5 * 1024 * 1024) {
+        setMessage("Error: Image size must be less than 5MB.");
         return;
       }
       const reader = new FileReader();
@@ -156,31 +157,35 @@ export default function EventsDashboard() {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold">Manage Events</h2>
-      {message && (
-        <p
-          className={`mt-2 text-lg font-semibold ${
-            message.startsWith("Error") ? "text-red-500" : "text-green-500"
-          }`}
-        >
-          {message}
-        </p>
-      )}
+    <div className="min-h-screen bg-gray-100 text-black">
+      <AdminNav active="events" />
+      <main className="p-6 max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6">Manage Events</h2>
+        {message && (
+          <p
+            className={`mt-2 text-lg font-semibold ${
+              message.startsWith("Error") ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {message}
+          </p>
+        )}
 
-      <div className="mt-4 p-4 border rounded">
-        <h3 className="text-xl font-semibold">
-          {editEventId ? "Edit Event" : "Add Event"}
-        </h3>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newEvent.title}
-          onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-          className="block w-full border p-2 mt-2 text-black rounded mb-2"
-          required
-        />
-        {/* <textarea
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8 text-black space-y-4">
+          <h3 className="text-xl font-semibold">
+            {editEventId ? "Edit Event" : "Add Event"}
+          </h3>
+          <input
+            type="text"
+            placeholder="Title"
+            value={newEvent.title}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, title: e.target.value })
+            }
+            className="block w-full border p-2 mt-2 text-black rounded mb-2"
+            required
+          />
+          {/* <textarea
           placeholder="Description"
           value={newEvent.description}
           onChange={(e) =>
@@ -189,162 +194,171 @@ export default function EventsDashboard() {
           className="block w-full border p-2 mt-2 text-black rounded"
           required
         /> */}
-        {/* ReactMde Markdown Editor */}
-        <ReactMde
-          value={newEvent.description}
-          onChange={(value) => setNewEvent({ ...newEvent, description: value })}
-          selectedTab={selectedTab}
-          onTabChange={setSelectedTab}
-          generateMarkdownPreview={(markdown) =>
-            Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
-          }
-          className="mt-2 text-black h-60"
-        />
-        <input
-          type="date"
-          value={newEvent.date}
-          onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-          className="block w-full border p-2 mt-2 text-black rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Example: What's Up Islamic Finance (optional)"
-          value={newEvent.theme}
-          onChange={(e) => setNewEvent({ ...newEvent, theme: e.target.value })}
-          className="block w-full border p-2 mt-2 text-black rounded"
-        />
-        <input
-          type="text"
-          placeholder="Example: Ramadam 2025 (optional)"
-          value={newEvent.season}
-          onChange={(e) => setNewEvent({ ...newEvent, season: e.target.value })}
-          className="block w-full border p-2 mt-2 text-black rounded"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="block w-full border p-2 mt-2 rounded"
-          required={!editEventId}
-        />
-        <label className="block mt-2">
-          <input
-            type="checkbox"
-            checked={newEvent.visible}
-            onChange={(e) =>
-              setNewEvent({ ...newEvent, visible: e.target.checked })
+          {/* ReactMde Markdown Editor */}
+          <ReactMde
+            value={newEvent.description}
+            onChange={(value) =>
+              setNewEvent({ ...newEvent, description: value })
             }
-          />{" "}
-          Visible
-        </label>
-        {newEvent.image && (
-          <Image
-            src={newEvent.image}
-            alt="Preview"
-            width={200}
-            height={200}
-            className="mt-2 object-cover rounded"
+            selectedTab={selectedTab}
+            onTabChange={setSelectedTab}
+            generateMarkdownPreview={(markdown) =>
+              Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+            }
+            className="mt-2 text-black h-60"
           />
-        )}
-        <button
-          onClick={handleSubmit}
-          className="mt-4 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full inline-block"></span>
-          ) : editEventId ? (
-            "Update Event"
-          ) : (
-            "Add Event"
+          <input
+            type="date"
+            value={newEvent.date}
+            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+            className="block w-full border p-2 mt-2 text-black rounded"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Example: What's Up Islamic Finance (optional)"
+            value={newEvent.theme}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, theme: e.target.value })
+            }
+            className="block w-full border p-2 mt-2 text-black rounded"
+          />
+          <input
+            type="text"
+            placeholder="Example: Ramadam 2025 (optional)"
+            value={newEvent.season}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, season: e.target.value })
+            }
+            className="block w-full border p-2 mt-2 text-black rounded"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="block w-full border p-2 mt-2 rounded"
+            required={!editEventId}
+          />
+          <label className="block mt-2">
+            <input
+              type="checkbox"
+              checked={newEvent.visible}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, visible: e.target.checked })
+              }
+            />{" "}
+            Visible
+          </label>
+          {newEvent.image && (
+            <Image
+              src={newEvent.image}
+              alt="Preview"
+              width={200}
+              height={200}
+              className="mt-2 object-cover rounded"
+            />
           )}
-        </button>
-      </div>
+          <button
+            onClick={handleSubmit}
+            className="mt-4 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full inline-block"></span>
+            ) : editEventId ? (
+              "Update Event"
+            ) : (
+              "Add Event"
+            )}
+          </button>
+        </div>
 
-      <h3 className="text-2xl font-semibold mt-6">All Events</h3>
-      <table className="bg-white w-full mt-4 border-collapse border border-gray-300 text-black">
-        <thead>
-          <tr className="bg-gray-800 text-white">
-            <th className="border p-2">Image</th>
-            <th className="border p-2">Title</th>
-            <th className="border p-2">Theme</th>
-            <th className="border p-2">Season</th>
-            <th className="border p-2">Date</th>
-            <th className="border p-2">Period</th>
-            <th className="border p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedEvents.map((event) => (
-            <tr key={event._id} className="border">
-              <td className="border p-2">
-                <Image
-                  src={event.image}
-                  alt={event.title}
-                  width={100}
-                  height={100}
-                  className="object-cover rounded"
-                />
-              </td>
-              <td className="border p-2">{event.title}</td>
-              <td className="border p-2">
-                {event?.theme ? event.theme : "----"}
-              </td>
-              <td className="border p-2">
-                {event?.season ? event.season : "-----"}
-              </td>
-              <td className="border p-2">
-                {new Date(event.date).toLocaleDateString()}
-              </td>
-              <td className="border p-2">
-                {event.date >= currentDate ? "Upcoming" : "Past"}
-              </td>
-              <td className="border p-2">
-                <button
-                  onClick={() => toggleVisibility(event._id)}
-                  className={`p-2 rounded ${
-                    event.visible ? "bg-green-500" : "bg-gray-500"
-                  }`}
-                >
-                  {event.visible ? "Visible" : "Hidden"}
-                </button>
-                <button
-                  onClick={() => handleEdit(event)}
-                  className="bg-yellow-500 text-white p-2 rounded ml-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteEvent(event._id)}
-                  className="bg-red-500 text-white p-2 rounded ml-2"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="p-2 bg-blue-500 text-white rounded disabled:invisible"
-        >
-          Previous
-        </button>
-        <span>
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={page === totalPages}
-          className="p-2 bg-blue-500 text-white rounded disabled:invisible"
-        >
-          Next
-        </button>
-      </div>
+        <h3 className="text-2xl font-semibold mt-6">All Events</h3>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <table className="w-full table-auto rounded-lg">
+            <thead>
+              <tr className="bg-gray-800 text-white">
+                <th className="border p-4">Image</th>
+                <th className="border p-4">Title</th>
+                <th className="border p-4">Theme</th>
+                <th className="border p-4">Season</th>
+                <th className="border p-4">Date</th>
+                <th className="border p-4">Period</th>
+                <th className="border p-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedEvents.map((event) => (
+                <tr key={event._id} className="border">
+                  <td className="border p-2">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      width={100}
+                      height={100}
+                      className="object-cover rounded"
+                    />
+                  </td>
+                  <td className="border p-2">{event.title}</td>
+                  <td className="border p-2">
+                    {event?.theme ? event.theme : "----"}
+                  </td>
+                  <td className="border p-2">
+                    {event?.season ? event.season : "-----"}
+                  </td>
+                  <td className="border p-2">
+                    {new Date(event.date).toLocaleDateString()}
+                  </td>
+                  <td className="border p-2">
+                    {event.date >= currentDate ? "Upcoming" : "Past"}
+                  </td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => toggleVisibility(event._id)}
+                      className={`p-2 rounded ${
+                        event.visible ? "bg-green-500" : "bg-gray-500"
+                      }`}
+                    >
+                      {event.visible ? "Visible" : "Hidden"}
+                    </button>
+                    <button
+                      onClick={() => handleEdit(event)}
+                      className="bg-yellow-500 text-white p-2 rounded ml-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteEvent(event._id)}
+                      className="bg-red-500 text-white p-2 rounded ml-2"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-between mt-4">
+          <button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+            className="p-2 bg-blue-500 text-white rounded disabled:invisible"
+          >
+            Previous
+          </button>
+          <span>
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+            className="p-2 bg-blue-500 text-white rounded disabled:invisible"
+          >
+            Next
+          </button>
+        </div>
+      </main>
     </div>
   );
 }
