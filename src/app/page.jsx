@@ -113,7 +113,7 @@ export default function Home() {
                 priority
                 onLoad={() => setImageLoaded(true)}
               />
-              <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 top-48">
+              <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 top-44 md:top-48">
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 leading-10 tracking-wide">
                   {hero.title.split(" ").map((word, index) => (
                     <>
