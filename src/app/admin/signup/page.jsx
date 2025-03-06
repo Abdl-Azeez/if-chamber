@@ -32,7 +32,7 @@ export default function AdminSignup() {
         onSubmit={handleSignup}
         className="bg-white p-6 shadow-md rounded w-96"
       >
-        <h2 className="text-2xl font-bold mb-4">Admin Sign-Up</h2>
+        <h2 className="text-2xl font-bold mb-4 text-blue-800">Admin Sign-Up</h2>
         {error && <p className="text-red-500">{error}</p>}
         <input
           type="text"

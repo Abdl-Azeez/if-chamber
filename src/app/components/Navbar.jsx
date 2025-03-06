@@ -83,9 +83,12 @@ export default function Navbar(props) {
     },
   ];
 
-  const textColorClass = props.isHome
-    ? "text-white hover:text-brandGold transition-colors duration-300"
-    : "text-gray-700 hover:text-brandGold transition-colors duration-300";
+  const textColorClass =
+    props.isHome && !isMobileMenuOpen
+      ? "text-white hover:text-brandGold transition-colors duration-300"
+      : props.isHome && isMobileMenuOpen
+      ? "text-black hover:text-brandGold transition-colors duration-300"
+      : "text-gray-700 hover:text-brandGold transition-colors duration-300";
 
   const activeColorClass = "text-brandGold"; // Active state color
 
