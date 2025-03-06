@@ -58,23 +58,24 @@ export default function Home() {
       <Navbar isHome={true} />
 
       {/* Hero Section */}
-      {heroes.length === 0 && !heroLoading && (
-        <section
-          className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
-            imageLoaded ? "bg-transparent" : "bg-blue-500"
-          } h-[120vh] w-full`}
-        >
-          {/* Background Image */}
-          <Image
-            src="/hero_bg.webp"
-            alt="Hero Background"
-            layout="fill"
-            objectFit="cover"
-            priority
-            onLoad={() => setImageLoaded(true)}
-          />
-          <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-16">
-            {/* <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
+      {heroes.length === 0 ||
+        (heroLoading && (
+          <section
+            className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
+              imageLoaded ? "bg-transparent" : "bg-blue-500"
+            } h-[120vh] w-full`}
+          >
+            {/* Background Image */}
+            <Image
+              src="/hero_bg.webp"
+              alt="Hero Background"
+              layout="fill"
+              objectFit="cover"
+              priority
+              onLoad={() => setImageLoaded(true)}
+            />
+            <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-16">
+              {/* <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
               Empowering Ethical Finance
               <br />
               and Islamic Growth
@@ -93,9 +94,9 @@ export default function Home() {
                 <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
               </button>
             </div> */}
-          </div>
-        </section>
-      )}
+            </div>
+          </section>
+        ))}
       {heroes.length > 1 ? (
         <Slider {...sliderSettings}>
           {heroes.map((hero) => (
