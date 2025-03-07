@@ -4,8 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-// TODO:
-// 1. Show Message if no events
+
 export default function EventsPage() {
   const [events, setEvents] = useState({ past: [], upcoming: [] });
   const [activeTab, setActiveTab] = useState("upcoming");
@@ -14,10 +13,12 @@ export default function EventsPage() {
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [hasMorePast, setHasMorePast] = useState(true);
   const [hasMoreUpcoming, setHasMoreUpcoming] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        setLoading(true);
         const response = await fetch("/api/events?page=1&limit=10");
         const data = await response.json();
 
@@ -45,6 +46,8 @@ export default function EventsPage() {
         setHasMoreUpcoming(data.total > 10);
       } catch (error) {
         console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -84,15 +87,16 @@ export default function EventsPage() {
           >
             <div className="flex flex-col items-center bg-white bg-opacity-60 px-6 sm:px-12 py-6 sm:py-8 text-center shadow-lg relative">
               <div className="bg-brandGold text-white px-6 sm:px-12 py-2 rounded-tl-lg rounded-tr-lg flex items-center space-x-2 sm:space-x-3">
-                {bannerEvent?.theme ? <div className="text-center">
-                  <p className="text-sm sm:text-lg font-semibold">
-                    {bannerEvent?.theme}
-                  </p>
-                  <p className="text-xs sm:text-sm font-bold text-yellow-300">
-                    {bannerEvent?.season ? bannerEvent?.season : ''}
-                  </p>
-                </div>
-                  :null}
+                {bannerEvent?.theme ? (
+                  <div className="text-center">
+                    <p className="text-sm sm:text-lg font-semibold">
+                      {bannerEvent?.theme}
+                    </p>
+                    <p className="text-xs sm:text-sm font-bold text-yellow-300">
+                      {bannerEvent?.season ? bannerEvent?.season : ""}
+                    </p>
+                  </div>
+                ) : null}
               </div>
 
               <h2 className="text-lg sm:text-2xl w-5/6 font-bold text-gray-900 mt-4 sm:mt-8">
@@ -101,12 +105,12 @@ export default function EventsPage() {
               <p className="text-sm sm:text-lg font-semibold text-gray-700 mt-4 sm:mt-8">
                 {new Date(bannerEvent.date).toDateString()}
               </p>
-                      </div>
-                      <Link href={`/events/${bannerEvent._id}`} passHref>
-            <button className="mt-6 sm:mt-8 bg-brandGold text-white px-8 sm:px-12 py-4 sm:py-6 hover:bg-yellow-600 transition-all duration-300 ease-in-out">
-              More Details
-                          </button>
-                          </Link>
+            </div>
+            <Link href={`/events/${bannerEvent._id}`} passHref>
+              <button className="mt-6 sm:mt-8 bg-brandGold text-white px-8 sm:px-12 py-4 sm:py-6 hover:bg-yellow-600 transition-all duration-300 ease-in-out">
+                More Details
+              </button>
+            </Link>
           </div>
         )}
 
@@ -133,47 +137,72 @@ export default function EventsPage() {
               Past Events
             </button>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {(activeTab === "past" ? events.past : events.upcoming).map(
+          {events[activeTab].length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 sm:h-72 md:h-80 lg:h-96">
+  <div className="text-center px-4 sm:px-6">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-12 w-12 sm:h-16 sm:w-16 text-gray-400 mx-auto mb-3 sm:mb-4"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      />
+    </svg>
+    <p className="text-gray-600 text-base sm:text-lg font-semibold mb-2">
+      No events available.
+    </p>
+    <p className="text-gray-500 text-xs sm:text-sm">
+      Check back later for upcoming events!
+    </p>
+  </div>
+</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {(activeTab === "past" ? events.past : events.upcoming).map(
                 (event) => (
-                    <Link key={event._id} href={`/events/${event._id}`} passHref>
-                <div
-                  
-                  className="cursor-pointer bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ease-in-out"
-                >
-                  <div className="relative w-full h-48 sm:h-64 overflow-hidden rounded-lg">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-lg"
-                    />
-                  </div>
+                  <Link key={event._id} href={`/events/${event._id}`} passHref>
+                    <div className="cursor-pointer bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ease-in-out">
+                      <div className="relative w-full h-48 sm:h-64 overflow-hidden rounded-lg">
+                        <Image
+                          src={event.image}
+                          alt={event.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                      </div>
 
-                  <div className="p-4">
-                    <h3 className="text-base sm:text-lg font-bold text-brandGold">
-                      {event.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-600">
-                      {new Date(event.date).toDateString()}
-                    </p>
-                  </div>
-                        </div>
-                        </Link>
-              )
+                      <div className="p-4">
+                        <h3 className="text-base sm:text-lg font-bold text-brandGold">
+                          {event.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-600">
+                          {new Date(event.date).toDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              )}
+            </div>
+          )}
+          {!loading &&
+            events[activeTab].length > 0 &&
+            ((activeTab === "past" && hasMorePast) ||
+              (activeTab === "upcoming" && hasMoreUpcoming)) && (
+              <button
+                className="mt-6 px-8 sm:px-12 py-4 sm:py-6 bg-brandGold text-white"
+                onClick={() => loadMoreEvents(activeTab)}
+              >
+                See More Events &rarr;
+              </button>
             )}
-          </div>
-          {(activeTab === "past" && hasMorePast) ||
-          (activeTab === "upcoming" && hasMoreUpcoming) ? (
-            <button
-              className="mt-6 px-8 sm:px-12 py-4 sm:py-6 bg-brandGold text-white"
-              onClick={() => loadMoreEvents(activeTab)}
-            >
-              See More Events &rarr;
-            </button>
-          ) : null}
         </div>
       </div>
       <Footer />

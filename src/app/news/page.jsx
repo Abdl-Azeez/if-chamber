@@ -1,42 +1,75 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { FaHome } from "react-icons/fa";
+import ReactMarkdown from "react-markdown";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Link from "next/link";
 
 export default function NewsPage() {
-  const [news, setNews] = useState([]);
+  const [ifChamberNews, setIfChamberNews] = useState([]);
+  const [rssNews, setRssNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [page, setPage] = useState(1);
+  const [loadingMoreIfChamber, setLoadingMoreIfChamber] = useState(false);
+  const [loadingMoreRss, setLoadingMoreRss] = useState(false);
+  const [ifChamberPage, setIfChamberPage] = useState(1);
+  const [rssPage, setRssPage] = useState(1);
+  const [ifChamberTotal, setIfChamberTotal] = useState(null);
 
-  const isFetched = useRef(false); // Prevent double fetch in development
+  const isFetched = useRef(false);
 
   useEffect(() => {
-    if (isFetched.current) return; // Prevent duplicate calls in Strict Mode
+    if (isFetched.current) return; 
     isFetched.current = true;
 
-    fetchNews(3, 1);
+    fetchIfChamberNews(1);
+    fetchRssNews(3, 1);
   }, []);
 
-  const fetchNews = async (limit, pageNumber) => {
+  const fetchIfChamberNews = async (pageNumber) => {
     try {
-      const res = await fetch(`/api/rss?limit=${limit}&page=${pageNumber}`);
+      setLoadingMoreIfChamber(true);
+      const res = await fetch(`/api/news?page=${pageNumber}&limit=3`);
       const data = await res.json();
-      setNews((prev) => [...prev, ...data]);
+const visibleNews = data.news.filter((news) => news.visible);
+      setIfChamberNews((prev) => [...prev, ...visibleNews]);
+      if (pageNumber === 1) {
+      const totalVisible = data.total - data.news.filter((news) => !news.visible).length;
+      setIfChamberTotal(totalVisible);
+    }
     } catch (error) {
-      console.error("Failed to fetch news", error);
+      console.error("Failed to fetch IFChamber news", error);
     } finally {
+      setLoadingMoreIfChamber(false);
       setLoading(false);
-      setLoadingMore(false);
     }
   };
 
-  const handleShowMore = () => {
-    setLoadingMore(true);
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchNews(3, nextPage);
+  const fetchRssNews = async (limit, pageNumber) => {
+    try {
+      setLoadingMoreRss(true);
+      const res = await fetch(`/api/rss?limit=${limit}&page=${pageNumber}`);
+      const data = await res.json();
+
+      setRssNews((prev) => [...prev, ...data]);
+    } catch (error) {
+      console.error("Failed to fetch RSS news", error);
+    } finally {
+      setLoadingMoreRss(false);
+      setLoading(false);
+    }
+  };
+
+  const handleShowMoreIfChamber = () => {
+    const nextPage = ifChamberPage + 1;
+    setIfChamberPage(nextPage);
+    fetchIfChamberNews(nextPage);
+  };
+
+  const handleShowMoreRss = () => {
+    const nextPage = rssPage + 1;
+    setRssPage(nextPage);
+    fetchRssNews(3, nextPage);
   };
 
   return (
@@ -50,69 +83,93 @@ export default function NewsPage() {
           <h1 className="text-5xl font-bold">Islamic Finance News</h1>
         </div>
 
-        {/* News Section */}
-        <div className="px-6 lg:px-12 py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {loading
-            ? Array(3)
-                .fill(0)
-                .map((_, index) => (
-                  <div
-                    key={index}
-                    className=" bg-white pb-12 rounded-lg shadow-lg relative overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-t-2 border-brandGold"
-                  >
-                    <div className=" p-6">
-                      <p className="text-sm text-gray-500">News</p>
-                      <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">
-                        Fetching News...
-                      </h2>
-                      <p className="text-gray-600 line-clamp-3">
-                        Please wait a moment while we fetch the latest news.
-                      </p>
-                    </div>
+        {/* IFChamber News Section */}
+        {ifChamberNews.length > 0 && (
+          <div className="px-6 lg:px-12 py-10">
+            <h2 className="text-2xl font-bold mb-6 text-brandGold">IFChamber News</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {loading
+                ? Array(3).fill(0).map((_, index) => (
+                  <div key={index} className="bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative">
+                    <p className="text-sm text-gray-500">News</p>
+                    <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">Fetching News...</h2>
+                    <p className="text-gray-600 line-clamp-3">Please wait a moment while we fetch the latest news.</p>
                   </div>
                 ))
-            : news.map((item, index) => (
-                <div
-                  key={item.link}
-                  role="button"
-                  tabIndex={0}
-                  className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg relative overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-t-2 border-brandGold"
-                  onClick={() => window.open(item.link, "_blank")}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      window.open(item.link, "_blank");
-                    }
-                  }}
-                >
-                  <div className=" p-6">
-                    <p className="text-sm text-gray-500">News</p>
-                    <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">
-                      {item.title}
-                    </h2>
-                    <p className="text-gray-600 line-clamp-3">
-                      {item.description}
-                    </p>
-                    <p className=" text-sm text-gray-500 absolute bottom-4">
-                      Source: {item.source}
-                    </p>
-                  </div>
-                </div>
-              ))}
-        </div>
+                : ifChamberNews.map((item) => (
+                  <Link key={item._id} href={`/news/${item._id}`} passHref>
+                  <div
+  className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative h-full sm:h-72 md:h-80 lg:h-96"
+>
+                    <p className="text-sm text-gray-500">IFChamber News</p>
+                    <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">{item.title}</h2>
+                    <div className="text-gray-600 line-clamp-3">
+                      <ReactMarkdown>{item.description}</ReactMarkdown></div>
+                    <p className="text-sm text-gray-500 absolute bottom-4">Source: IFChamber</p>
+                    </div>
+                    </Link>
+                ))}
+            </div>
 
-        {/* Show More Button */}
-        <div className="mt-8 text-center">
-          <button
-            onClick={handleShowMore}
-            disabled={loadingMore}
-            className="bg-brandGold text-white py-6 px-8 hover:bg-[#84670CCC] transition-colors duration-300"
-          >
-            {loadingMore ? (
-              <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full block"></span>
-            ) : (
-              <span className="text-xl">SEE MORE NEWS &gt;</span>
-            )}
-          </button>
+            {/* Show More Button for IFChamber News (Disabled if all news are loaded) */}
+            {ifChamberTotal === null || ifChamberNews.length < ifChamberTotal ? (
+              <div className="mt-8 text-center">
+                <button
+                  onClick={handleShowMoreIfChamber}
+                  disabled={loadingMoreIfChamber}
+                  className="bg-brandGold text-white p-3 md:p-5 hover:bg-[#84670CCC] transition-colors duration-300"
+                >
+                  {loadingMoreIfChamber ? (
+                    <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full block"></span>
+                  ) : (
+                    <span className="text-xl">SEE MORE IFCHAMBER NEWS &gt;</span>
+                  )}
+                </button>
+              </div>
+            ) : null}
+          </div>
+        )}
+        {/* Islamic Finance News Section (RSS) */}
+        <div className="px-6 lg:px-12 py-10">
+          {ifChamberTotal !== null && <h2 className="text-2xl font-bold mb-6 text-brandGold">Others</h2>}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {loading
+              ? Array(3).fill(0).map((_, index) => (
+                  <div key={index} className="bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative">
+                    <p className="text-sm text-gray-500">News</p>
+                    <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">Fetching News...</h2>
+                    <p className="text-gray-600 line-clamp-3">Please wait a moment while we fetch the latest news.</p>
+                  </div>
+                ))
+              : rssNews.map((item) => (
+                
+                  <div
+                    key={item.link}
+                    className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative" 
+                    onClick={() => window.open(item.link, "_blank")}
+                  >
+                    <p className="text-sm text-gray-500">News</p>
+                    <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">{item.title}</h2>
+                    <p className="text-gray-600 line-clamp-3">{item.description}</p>
+                    <p className="text-sm text-gray-500 absolute bottom-4">Source: {item.source}</p>
+                  </div>
+                ))}
+          </div>
+
+          {/* Show More Button for Islamic Finance News */}
+          <div className="mt-8 text-center">
+            <button
+              onClick={handleShowMoreRss}
+              disabled={loadingMoreRss}
+              className="bg-brandGold text-white p-3 md:p-5 hover:bg-[#84670CCC] transition-colors duration-300"
+            >
+              {loadingMoreRss ? (
+                <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full block"></span>
+              ) : (
+                <span className="text-xl">SEE MORE ISLAMIC FINANCE NEWS &gt;</span>
+              )}
+            </button>
+          </div>
         </div>
       </main>
       {/* Footer */}

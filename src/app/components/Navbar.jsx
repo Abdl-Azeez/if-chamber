@@ -398,41 +398,82 @@ export default function Navbar(props) {
 
           <ul className="space-y-0 border-t">
             <li className="border-b">
-              <button
-                className={`w-full text-left flex justify-between items-center px-4 py-3 ${
-                  isThoughtLeadershipOpen ? "text-brandGold" : textColorClass
-                }`}
-                onClick={() =>
-                  setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
-                }
-              >
-                Thought Leadership
-                <svg
-                  className={`w-4 h-4 transition-transform ${
-                    isThoughtLeadershipOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              {isThoughtLeadershipOpen && (
-                <ul className="pl-8 space-y-2 text-gray-600">
-                  <li>Islamic Finance and AI</li>
-                  <li>Blockchain's Future</li>
-                  <li>Case Study</li>
-                  <li>Podcast</li>
-                  <li>Research</li>
-                </ul>
-              )}
-            </li>
+  
+  <div
+    className={`w-full text-left flex justify-between items-center px-4 py-3 cursor-pointer ${
+      isThoughtLeadershipOpen ? "text-brandGold" : textColorClass
+    }`}
+    onClick={() => setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)}
+  >
+    Thought Leadership
+    <svg
+      className={`w-4 h-4 transition-transform ${
+        isThoughtLeadershipOpen ? "rotate-180" : ""
+      }`}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 9l-7 7-7-7"
+      />
+    </svg>
+  </div>
+
+  {/* Dropdown content */}
+  {isThoughtLeadershipOpen && (
+    <ul className="pl-8 space-y-2 text-brandGold">
+      <li>
+        <Link
+          href="/islamic-finance-ai"
+          className="block hover:underline"
+          onClick={() => setIsMobileMenuOpen(false)} 
+        >
+          Islamic Finance and AI
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/blockchain-future"
+          className="block hover:underline"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Blockchain's Future
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/case-study"
+          className="block hover:underline"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Case Study
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/podcast"
+          className="block hover:underline"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Podcast
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/research"
+          className="block hover:underline"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Research
+        </Link>
+      </li>
+    </ul>
+  )}
+</li>
             <li className="border-b">
               <Link
                 href="/news"
@@ -469,11 +510,23 @@ export default function Navbar(props) {
                 </svg>
               </button>
               {isExpertiseOpen && (
-                <ul className="pl-8 space-y-2 text-gray-600">
-                  <li>Shari’ah Advisory & Compliance</li>
-                  <li>Training & Capacity Building</li>
-                  <li>Finance Consulting</li>
-                </ul>
+                <ul className="pl-8 space-y-2 text-brandGold">
+  <li>
+    <Link href="/shariah-advisory-compliance" className="hover:underline">
+      Shari’ah Advisory & Compliance
+    </Link>
+  </li>
+  <li>
+    <Link href="/training-capacity-building" className="hover:underline">
+      Training & Capacity Building
+    </Link>
+  </li>
+  <li>
+    <Link href="/finance-consulting" className="hover:underline">
+      Finance Consulting
+    </Link>
+  </li>
+</ul>
               )}
             </li>
             <li className="border-b">

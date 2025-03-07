@@ -2,6 +2,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import ReactMde from "react-mde";
+import remarkBreaks from "remark-breaks"; 
+import remarkGfm from "remark-gfm"; 
 import "react-mde/lib/styles/css/react-mde-all.css";
 import ReactMarkdown from "react-markdown";
 import AdminNav from "@/app/components/AdminNav";
@@ -203,7 +205,7 @@ export default function EventsDashboard() {
             selectedTab={selectedTab}
             onTabChange={setSelectedTab}
             generateMarkdownPreview={(markdown) =>
-              Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+              Promise.resolve(<ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>{markdown}</ReactMarkdown>)
             }
             className="mt-2 text-black h-60"
           />
