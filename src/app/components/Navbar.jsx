@@ -85,13 +85,15 @@ export default function Navbar(props) {
 
   const textColorClass =
     props.isHome && !isMobileMenuOpen
-      ? "text-white hover:text-brandGold transition-colors duration-300"
+      ? "hover:text-brandGold transition-colors duration-300"
       : props.isHome && isMobileMenuOpen
       ? "text-black hover:text-brandGold transition-colors duration-300"
       : "text-gray-700 hover:text-brandGold transition-colors duration-300";
 
   const activeColorClass = "text-brandGold"; // Active state color
 
+const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor } : {};
+  
   // Close submenus on click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -130,7 +132,8 @@ export default function Navbar(props) {
     <nav
       className={`md:w-full w-screen shadow-sm z-50 ${
         props.isHome ? "absolute" : "relative"
-      } ${isMobileMenuOpen ? "bg-white" : "bg-transparent"}`}
+        } ${isMobileMenuOpen ? "bg-white" : "bg-transparent"}`}
+      style={textStyle}
     >
       {/* Top Row */}
       <div className="whitespace-nowrap w-full pl-4 md:pl-16 pr-4 mx-auto py-4 flex md:justify-between items-center">
@@ -179,12 +182,14 @@ export default function Navbar(props) {
             <Link
               href="/about"
               className={props.isAbout ? activeColorClass : textColorClass}
+            style={textStyle}
             >
               About
             </Link>
             <Link
               href="/events"
               className={props.isEvent ? activeColorClass : textColorClass}
+            style={textStyle}
             >
               Events
             </Link>
@@ -193,6 +198,7 @@ export default function Navbar(props) {
               className={
                 props.isOpportunities ? activeColorClass : textColorClass
               }
+              style={textStyle}
             >
               Opportunities
             </Link>
@@ -200,7 +206,8 @@ export default function Navbar(props) {
               <button
                 className={`${
                   props.isResources ? activeColorClass : textColorClass
-                } flex items-center gap-1`}
+                  } flex items-center gap-1`}
+                style={textStyle}
               >
                 Resources
                 <svg
@@ -221,6 +228,7 @@ export default function Navbar(props) {
             <Link
               href="/contact"
               className={props.isContact ? activeColorClass : textColorClass}
+           style={textStyle}
             >
               Contact Us
             </Link>
@@ -236,6 +244,7 @@ export default function Navbar(props) {
                 onClick={() =>
                   setIsThoughtLeadershipOpen(!isThoughtLeadershipOpen)
                 }
+                style={textStyle}
               >
                 Thought Leadership
                 <svg
@@ -293,6 +302,7 @@ export default function Navbar(props) {
             <Link
               href="/news"
               className={props.isNews ? activeColorClass : textColorClass}
+            style={textStyle}
             >
               News
             </Link>
@@ -302,6 +312,7 @@ export default function Navbar(props) {
                   isExpertiseOpen ? "text-brandGold" : textColorClass
                 }  flex items-center gap-1`}
                 onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
+                style={textStyle}
               >
                 Expertise
                 <svg
@@ -354,6 +365,7 @@ export default function Navbar(props) {
               className={
                 props.isExpertCommunity ? activeColorClass : textColorClass
               }
+              style={textStyle}
             >
               Expert Community
             </Link>
@@ -361,7 +373,7 @@ export default function Navbar(props) {
               <svg
                 className="w-6 h-6"
                 fill="none"
-                stroke={props.isHome ? "white" : "black"}
+                stroke={props.isHome ? props.heroColor : "black"}
                 viewBox="0 0 24 24"
               >
                 <path

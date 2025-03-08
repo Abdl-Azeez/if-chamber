@@ -10,6 +10,8 @@ export default function HeroAdmin() {
     description: "",
     image: "",
     buttons: [],
+    visible: true,
+    textColor: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -57,6 +59,8 @@ export default function HeroAdmin() {
         description: "",
         image: "",
         buttons: [],
+        visible: true,
+        textColor: "",
       });
       fetchHeroes();
     } catch (err) {
@@ -205,6 +209,46 @@ export default function HeroAdmin() {
                 + Add Button
               </button>
             </div>
+            <label className="flex items-center space-x-2 cursor-pointer">
+  <div className="relative">
+    <input
+      type="checkbox"
+      checked={form.visible}
+      onChange={(e) => setForm({ ...form, visible: e.target.checked })}
+      className="sr-only" // Hide the default checkbox
+    />
+    <div className="w-6 h-6 bg-white border-2 border-blue-600 rounded-md flex items-center justify-center transition-colors duration-200">
+      {form.visible && (
+        <svg
+          className="w-4 h-4 text-blue-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+      )}
+    </div>
+  </div>
+  <span className="text-gray-700">Visible</span>
+            </label>
+           
+            <label className="flex items-center space-x-2 cursor-pointer mt-2">
+             <input
+                    type="color"
+                    value={form.textColor}
+                    onChange={(e) => {
+                      setForm({ ...form, textColor: e.target.value });
+                    }}
+                    className="w-12 h-10 border border-gray-300 rounded-md mr-2"
+            />
+            Text Color
+          </label>
             <button
               type="submit"
               disabled={loading}
@@ -275,7 +319,7 @@ export default function HeroAdmin() {
             <ul className="space-y-4">
               {heroes.map((hero) => (
                 <li key={hero._id} className="border-b pb-4">
-                  <h3 className="text-xl font-bold mb-2">{hero.title}</h3>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: hero.textColor }}>{hero.title}</h3>
                   {hero.image && (
                     <Image
                       src={hero.image}
@@ -285,7 +329,7 @@ export default function HeroAdmin() {
                       className="w-48 h-48 object-cover rounded-md mb-4"
                     />
                   )}
-                  <p className="text-gray-700 mb-4">{hero.description}</p>
+                  <p className="text-gray-700 mb-4" style={{ color: hero.textColor }}>{hero.description}</p>
                   {/* Display Buttons if Available */}
                   {hero.buttons?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">

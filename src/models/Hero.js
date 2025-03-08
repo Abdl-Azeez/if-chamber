@@ -12,6 +12,7 @@ const HeroSchema = new mongoose.Schema({
     },
   ],
   visible: { type: Boolean, default: true },
+  textColor: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 
