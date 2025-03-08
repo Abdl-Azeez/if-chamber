@@ -6,6 +6,9 @@ import Navbar from "./components/Navbar";
 import TrendingContent from "./components/Trending";
 import Footer from "./components/Footer";
 import Partners from "./components/Partners";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Home() {
   const [news, setNews] = useState([]);
@@ -13,6 +16,7 @@ export default function Home() {
   const [heroLoading, setHeroLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [heroColor, setHeroColor] = useState("white");
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -20,10 +24,10 @@ export default function Home() {
       try {
         const adminRes = await fetch("/api/news");
         const adminData = await adminRes.json();
-         const adminNews = adminData.news
-        .filter((news) => news.showInHero && news.visible)
-           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
+        const adminNews = adminData.news
+          .filter((news) => news.showInHero && news.visible)
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         if (adminNews.length < 3) {
           const rssRes = await fetch(`/api/rss?limit=${3 - adminNews.length}`);
           const rssData = await rssRes.json();
@@ -45,7 +49,10 @@ export default function Home() {
     fetch("/api/hero")
       .then((res) => res.json())
       .then((data) => {
-        setHeroes(data.heroes.filter((hero) => hero.visibility !== false));
+        setHeroes(data.heroes.filter((hero) => hero.visible !== false));
+        if (visibleHeroes.length > 0) {
+          setHeroColor(visibleHeroes[0].textColor || "white"); 
+        }
         setHeroLoading(false);
       })
       .catch((error) => {
@@ -53,6 +60,38 @@ export default function Home() {
         setHeroLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (heroes.length > 0) {
+      setHeroColor(heroes[0].textColor)
+    }
+  },[heroes])
+
+  const handleHeroChange = (index) => {
+    if (heroes[index]) {
+      setHeroColor(heroes[index].textColor || "white");
+    }
+  };
+
+  const NextArrow = ({ className, style, onClick }) => (
+    <button
+      className={className}
+      style={{ ...style, display: "block", right: "40px", zIndex: 10 }}
+      onClick={onClick}
+    >
+      <FaChevronRight size={40} color="#84670A" />
+    </button>
+  );
+
+  const PrevArrow = ({ className, style, onClick }) => (
+    <button
+      className={className}
+      style={{ ...style, display: "block", left: "10px", zIndex: 10 }}
+      onClick={onClick}
+    >
+      <FaChevronLeft size={40} color="#84670A" />
+    </button>
+  );
 
   const sliderSettings = {
     dots: true,
@@ -62,30 +101,34 @@ export default function Home() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
+    
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    beforeChange: (oldIndex, newIndex) => handleHeroChange(newIndex),
   };
 
   return (
     <main className="min-h-full bg-white">
-      <Navbar isHome={true} />
+      <Navbar isHome={true} heroColor={heroColor} />
 
       {/* Hero Section */}
       {heroLoading && (
-          <section
-            className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
-              imageLoaded ? "bg-transparent" : "bg-blue-500"
-            } h-[120vh] w-full`}
-          >
-            {/* Background Image */}
-            <Image
-              src="/hero_bg.webp"
-              alt="Hero Background"
-              layout="fill"
-              objectFit="cover"
-              priority
-              onLoad={() => setImageLoaded(true)}
-            />
-            <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-16">
-              {/* <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
+        <section
+          className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
+            imageLoaded ? "bg-transparent" : "bg-blue-500"
+          } h-[120vh] w-full`}
+        >
+          {/* Background Image */}
+          <Image
+            src="/hero_bg.webp"
+            alt="Hero Background"
+            layout="fill"
+            objectFit="cover"
+            priority
+            onLoad={() => setImageLoaded(true)}
+          />
+          <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-16">
+            {/* <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
               Empowering Ethical Finance
               <br />
               and Islamic Growth
@@ -104,17 +147,18 @@ export default function Home() {
                 <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
               </button>
             </div> */}
-            </div>
-          </section>
-        )}
+          </div>
+        </section>
+      )}
       {heroes.length > 1 ? (
         <Slider {...sliderSettings}>
           {heroes.map((hero) => (
             <section
               key={hero._id}
-              className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
+              className={`relative flex items-center py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
                 !heroLoading ? "bg-transparent" : "bg-blue-500"
-              } h-[120vh] w-full`}
+                } h-[120vh] w-full`}
+             style={{ color: hero.textColor || "white" }}
             >
               <Image
                 src={hero.image}
@@ -124,7 +168,7 @@ export default function Home() {
                 priority
                 onLoad={() => setImageLoaded(true)}
               />
-              <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 top-32 md:top-48">
+              <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 top-32 md:top-48" style={{ color: hero.textColor || "white" }}>
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 leading-10 tracking-wide">
                   {hero.title.split(" ").map((word, index) => (
                     <>
@@ -161,9 +205,10 @@ export default function Home() {
         heroes.map((hero) => (
           <section
             key={hero._id}
-            className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
+            className={`relative flex items-center py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
               imageLoaded && !heroLoading ? "bg-transparent" : "bg-blue-500"
-            } h-[120vh] w-full`}
+              } h-[120vh] w-full`}
+            style={{ color: hero.textColor || "white" }}
           >
             <Image
               src={hero.image}
@@ -173,7 +218,7 @@ export default function Home() {
               priority
               onLoad={() => setImageLoaded(true)}
             />
-            <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-20">
+            <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-20" style={{ color: hero.textColor || "white" }}>
               <h1 className="text-4xl md:text-6xl font-bold mb-8 leading-10 tracking-wide">
                 {hero.title.split(" ").map((word, index) => (
                   <>
@@ -240,7 +285,11 @@ export default function Home() {
                       </span>
                       <h3 className="text-lg font-semibold mt-2 line-clamp-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
                         <a
-                          href={article.source === 'IFChamber' ? `/news/${article._id}` : article.link}
+                          href={
+                            article.source === "IFChamber"
+                              ? `/news/${article._id}`
+                              : article.link
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:underline"
