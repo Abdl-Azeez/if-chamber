@@ -53,3 +53,73 @@ body {
   border: 2px solid #000;
   border-radius: 5px;
 }
+
+.react-markdown h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0; 
+}
+
+.react-markdown h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.react-markdown h3 {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.react-markdown p {
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+
+
+@media (min-width: 768px) {
+  .react-markdown h1 {
+    font-size: 1.75rem; 
+    margin: 1.2rem 0; 
+  }
+
+  .react-markdown h2 {
+    font-size: 1.5rem; 
+  }
+
+  .react-markdown h3 {
+    font-size: 1.25rem; 
+  }
+}
+
+@media (min-width: 1024px) {
+  .react-markdown h1 {
+    font-size: 2rem; 
+    margin: 1.5rem 0; 
+  }
+
+  .react-markdown h2 {
+    font-size: 1.75rem; 
+  }
+
+  .react-markdown h3 {
+    font-size: 1.5rem; 
+  }
+}
+
+
+@media (min-width: 1280px) {
+  .react-markdown h1 {
+    font-size: 2.25rem;
+    margin: 1.75rem 0;
+  }
+
+  .react-markdown h2 {
+    font-size: 2rem;
+  }
+
+  .react-markdown h3 {
+    font-size: 1.75rem;
+  }
+}

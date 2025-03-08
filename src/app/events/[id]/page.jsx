@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks"; 
+import remarkGfm from "remark-gfm"; 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
@@ -96,8 +98,8 @@ if (error)
         </p>
 
         {/* Description using ReactMarkdown */}
-        <div className="mt-8 lg:mt-16 pl-2 lg:pl-4 text-gray-800 leading-relaxed text-justify">
-          <ReactMarkdown>{event.description}</ReactMarkdown>
+        <div className="react-markdown mt-8 lg:mt-16 pl-2 lg:pl-4 text-gray-800 leading-relaxed text-justify">
+          <ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>{event.description}</ReactMarkdown>
         </div>
       </main>
     </div>

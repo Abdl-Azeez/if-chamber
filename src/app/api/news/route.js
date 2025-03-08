@@ -22,10 +22,20 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
+  // const auth = authenticateToken(req);
+  // if (auth.error)
+  //   return Response.json({ message: auth.error }, { status: 401 });
+
   await connectToDatabase();
-  await authenticateToken(req);
+  
   const body = await req.json();
-  const news = new News(body);
+
+  const { title, description, date, image, visible, showInHero, source } = body; 
+
+  const news = new News({
+    title, description, date, image, visible, showInHero: showInHero, source
+  });
+ 
   await news.save();
   return Response.json({ message: "News added successfully!", news });
 }

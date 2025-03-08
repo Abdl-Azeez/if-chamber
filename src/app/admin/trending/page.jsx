@@ -80,7 +80,7 @@ export default function ManageTrending() {
           ? "Content updated successfully!"
           : "Content added successfully!"
       );
-      console.log(newTrend);
+  
       setNewTrend({
         title: "",
         description: "",

@@ -15,18 +15,29 @@ export default function Home() {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-
-    fetch("/api/rss?limit=3")
-      .then((res) => res.json())
-      .then((data) => {
-        setNews(data);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchNews = async () => {
+      setLoading(true);
+      try {
+        const adminRes = await fetch("/api/news");
+        const adminData = await adminRes.json();
+         const adminNews = adminData.news
+        .filter((news) => news.showInHero && news.visible)
+           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        if (adminNews.length < 3) {
+          const rssRes = await fetch(`/api/rss?limit=${3 - adminNews.length}`);
+          const rssData = await rssRes.json();
+          setNews([...adminNews, ...rssData]);
+        } else {
+          setNews(adminNews.slice(0, 3));
+        }
+      } catch (error) {
         console.error("Error fetching news:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchNews();
   }, []);
 
   useEffect(() => {
@@ -58,8 +69,7 @@ export default function Home() {
       <Navbar isHome={true} />
 
       {/* Hero Section */}
-      {heroes.length === 0 ||
-        (heroLoading && (
+      {heroLoading && (
           <section
             className={`relative flex items-center text-white py-20 px-4 bg-cover bg-center bg-no-repeat transition-all duration-500 ${
               imageLoaded ? "bg-transparent" : "bg-blue-500"
@@ -96,7 +106,7 @@ export default function Home() {
             </div> */}
             </div>
           </section>
-        ))}
+        )}
       {heroes.length > 1 ? (
         <Slider {...sliderSettings}>
           {heroes.map((hero) => (
@@ -114,7 +124,7 @@ export default function Home() {
                 priority
                 onLoad={() => setImageLoaded(true)}
               />
-              <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 top-44 md:top-48">
+              <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 top-32 md:top-48">
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 leading-10 tracking-wide">
                   {hero.title.split(" ").map((word, index) => (
                     <>
@@ -122,7 +132,7 @@ export default function Home() {
                     </>
                   ))}
                 </h1>
-                <p className="text-lg md:text-xl mt-4 mb-12 max-w-2xl">
+                <p className="text-lg md:text-xl mt-4 mb-12 max-w-2xl line-clamp-3 md:line-clamp-5 ">
                   {hero.description}
                 </p>
                 <div className="flex flex-wrap gap-2 md:gap-6">
@@ -134,7 +144,7 @@ export default function Home() {
                       rel="noopener noreferrer"
                     >
                       <button
-                        className="px-4 py-2 text-white transition-all duration-300 ease-in-out relative group w-full"
+                        className="px-4 py-2 text-white transition-all duration-300 ease-in-out relative group max-w-[200px] md:w-full whitespace-nowrap truncate"
                         style={{ backgroundColor: button.color }}
                       >
                         {button.label}
@@ -230,7 +240,7 @@ export default function Home() {
                       </span>
                       <h3 className="text-lg font-semibold mt-2 line-clamp-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
                         <a
-                          href={article?.link}
+                          href={article.source === 'IFChamber' ? `/news/${article._id}` : article.link}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:underline"
@@ -239,7 +249,7 @@ export default function Home() {
                         </a>
                       </h3>
                       <p className="absolute bottom-4 text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                        Source: {article?.source}
+                        Source: {article.source || "Unknown"}
                       </p>
                     </div>
                   ))}
