@@ -49,7 +49,7 @@ export default function Home() {
     fetch("/api/hero")
       .then((res) => res.json())
       .then((data) => {
-        setHeroes(data.heroes.filter((hero) => hero.visibility !== false));
+        setHeroes(data.heroes.filter((hero) => hero.visible !== false));
         if (visibleHeroes.length > 0) {
           setHeroColor(visibleHeroes[0].textColor || "white"); 
         }
