@@ -134,7 +134,7 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
     <nav
       className={`md:w-full w-screen shadow-sm z-50 ${
         props.isHome ? "absolute" : "relative"
-        } ${isMobileMenuOpen ? "bg-white" : props.resources ? "bg-brandGold" : "bg-transparent"}`}
+        } ${isMobileMenuOpen ? "bg-white" : props.resources && !isMobileMenuOpen ? "bg-brandGold" : "bg-transparent"}`}
       style={textStyle}
     >
       {/* Top Row */}
@@ -144,10 +144,10 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
           className={`block md:hidden w-1/12 ${
             isMobileMenuOpen && props.isHome
               ? "text-brandGold"
-                ? isMobileMenuOpen && !props.isHome
+                ? isMobileMenuOpen && !props.isHome && !props.resources
                 : "text-black"
               : "text-gray-800"
-          } hover:text-brandGold transition-colors duration-300`}
+          } transition-colors duration-300`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           <svg
@@ -505,6 +505,16 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
                 }`}
               >
                 News
+              </Link>
+            </li>
+            <li className="border-b">
+              <Link
+                href="/resources"
+                className={`block px-4 py-3 text-left ${
+                  props.resources ? activeColorClass : textColorClass
+                }`}
+              >
+                Resources
               </Link>
             </li>
             <li className="border-b">

@@ -50,7 +50,7 @@ export default function ResourcePage() {
   const fetchResources = async () => {
     setIsLoading(true);
 
-    const response = await fetch(`/api/resources?page=${page}&limit=2`);
+    const response = await fetch(`/api/resources?page=${page}&limit=4`);
     const data = await response.json();
 
     setResources(prevResources => {
