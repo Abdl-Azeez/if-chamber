@@ -66,11 +66,19 @@ export default function AdminNav({ active }) {
         </a>
         <a
           href="/admin/news"
-          className={`hover:text-blue-300 hover:underline transition-colors duration-500 ${
+          className={`mr-10 hover:text-blue-300 hover:underline transition-colors duration-500 ${
             active === "news" ? "underline text-blue-400 font-bold" : ""
           }`}
         >
           News
+        </a>
+        <a
+          href="/admin/resources"
+          className={`hover:text-blue-300 hover:underline transition-colors duration-500 ${
+            active === "resource" ? "underline text-blue-400 font-bold" : ""
+          }`}
+        >
+          Resources
         </a>
       </div>
       <button onClick={handleLogout} className="text-red-400">

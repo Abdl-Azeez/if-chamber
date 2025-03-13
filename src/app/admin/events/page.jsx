@@ -75,15 +75,17 @@ export default function EventsDashboard() {
         },
         body: JSON.stringify(body),
       });
-
-      if (res.ok) {
-        if (res.status === 401) {
+if (!res.ok) {
+      if (res.status === 401) {
           localStorage.removeItem("token"); // Clear token
           window.location.href = "/admin/login"; // Redirect
 
           throw new Error(`HTTP Error! Status: ${res.status}`);
         }
-
+      throw new Error("Failed to submit resource")
+      
+    };
+      if (res.ok) {
         setMessage(
           editEventId
             ? "Event updated successfully!"
