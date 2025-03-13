@@ -12,8 +12,8 @@ export default function Navbar(props) {
   const thoughtLeadershipRef = useRef(null);
   const expertiseRef = useRef(null);
   const [logos, setLogos] = useState({
-    dashboard: "/logo_pattern.png",
-    site: "/logo.png",
+    dashboard: "/assets/logo_pattern.png",
+    site: "/assets/logo.png",
   });
 
   useEffect(() => {

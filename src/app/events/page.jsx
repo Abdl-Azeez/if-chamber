@@ -83,7 +83,7 @@ export default function EventsPage() {
         {bannerEvent && (
           <div
             className="relative w-full h-[40dvh] sm:h-[50dvh] md:h-[60dvh] flex flex-col items-center justify-center bg-cover bg-center px-4"
-            style={{ backgroundImage: `url(/eventBannerBg.png)` }}
+            style={{ backgroundImage: `url(/assets/eventBannerBg.png)` }}
           >
             <div className="flex flex-col items-center bg-white bg-opacity-60 px-6 sm:px-12 py-6 sm:py-8 text-center shadow-lg relative">
               <div className="bg-brandGold text-white px-6 sm:px-12 py-2 rounded-tl-lg rounded-tr-lg flex items-center space-x-2 sm:space-x-3">
