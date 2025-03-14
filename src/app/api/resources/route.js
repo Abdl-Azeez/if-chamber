@@ -35,7 +35,8 @@ export async function POST(req) {
     fileUrl,
     fileSize,
     fileType,
-    type,
+    category,
+    source,
     thumbnail,
     thumbnailUrl,
     thumbnailType,
@@ -44,7 +45,7 @@ export async function POST(req) {
   } = body;
 
   // Validate required fields
-  if (!title || !description || !author || !fileUrl || !fileSize || !fileType) {
+  if (!title || !description || !fileUrl || !fileSize || !fileType) {
     return Response.json({ message: "Missing required fields" }, { status: 400 });
   }
 
@@ -55,7 +56,8 @@ export async function POST(req) {
     fileUrl,
     fileSize,
     fileType,
-    type,
+    category,
+    source,
     thumbnail,
     thumbnailType: thumbnail ? thumbnailType : null,
     hasThumbnail: !!thumbnail,
