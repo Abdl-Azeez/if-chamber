@@ -36,6 +36,18 @@ const formatUpdatedAt = (dateString) => {
   return "Just now";
 };
 
+const getFileCategory = (fileType) => {
+  const sheetTypes = ["xls", "xlsx", "csv", "ods"];
+  const docTypes = ["doc", "docx", "pdf", "txt", "odt", "rtf"];
+  const slideTypes = ["ppt", "pptx", "odp"];
+
+  if (sheetTypes.includes(fileType.toLowerCase())) return "Sheet";
+  if (docTypes.includes(fileType.toLowerCase())) return "Docs";
+  if (slideTypes.includes(fileType.toLowerCase())) return "Slide";
+  
+  return "Other"; 
+};
+
 export default function ResourcePage() {
   const [viewType, setViewType] = useState('grid');
   const [previewResource, setPreviewResource] = useState(null);
@@ -111,16 +123,22 @@ useEffect(() => {
   // Handle download button click
 const handleDownload = (resource) => {
   if (resource.fileUrl) {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = resource.fileUrl;
-    link.download = resource.title; 
+    link.setAttribute("download", resource.title || "downloaded-file"); // Ensures file has a name
+    link.setAttribute("target", "_blank"); // Opens in new tab if needed
+    link.setAttribute("rel", "noopener noreferrer"); // Security best practice
+
     document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    setTimeout(() => {
+      link.click();
+      document.body.removeChild(link);
+    }, 100); // Small delay for mobile compatibility
   } else {
     alert("Download link not available.");
   }
 };
+
   // Handle close preview modal
   const closePreview = () => {
     setPreviewResource(null);
@@ -155,7 +173,7 @@ const handleDownload = (resource) => {
                   />
                 ) : (
                   <div className="bg-[#84670A] bg-opacity-70 rounded-full w-20 h-20 flex items-center justify-center">
-                    <span className="text-white text-2xl font-bold">{featuredResource.thumbnailType}</span>
+                    <span className="text-white text-2xl font-bold">{featuredResource.fileType}</span>
                   </div>
                 )}
               </div>
@@ -174,13 +192,9 @@ const handleDownload = (resource) => {
             
               <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
                 <span className="bg-[#84670A] text-white px-4 py-1 rounded-full text-sm">
-                  {featuredResource.fileType === "PDF" || featuredResource.fileType === "DOCX"
-                    ? "Docs"
-                    : featuredResource.fileType === "XLSX"
-                    ? "Sheets"
-                    : "Slides"}
+                  {featuredResource.category}
                 </span>
-                <span className="text-gray-600 text-sm">By {featuredResource.author}</span>
+                <span className="text-gray-600 text-sm line-clamp-1">{featuredResource.source ? `Source: ${featuredResource.source}` : `By ${featuredResource.author}`}</span>
                 <span className="text-gray-600 text-sm">Updated {formatUpdatedAt(featuredResource.updatedAt)}</span>
               
                 {/* Download Button */}
@@ -277,11 +291,23 @@ const handleDownload = (resource) => {
                     height={viewType === 'grid' ? 128 : 64}
                     className="w-full h-full object-cover"
                   />
-                ) : (
-                  <div className="bg-[#84670A] bg-opacity-70 rounded-full w-12 h-12 flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">{resource.thumbnailType}</span>
-                  </div>
-                )}
+                ) : getFileCategory(resource.fileType) === "Sheet" && !resource.thumbnail ?
+                    <div className="relative w-3/4 h-3/4">
+                      <div className="absolute inset-0 bg-[#84670A] opacity-30"></div>
+                      <svg className="absolute inset-0" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+                        <path 
+                          d="M0 40 L10 30 L30 35 L50 15 L70 20 L90 10 L100 20" 
+                          stroke="#84670A" 
+                          strokeWidth="3" 
+                          fill="none"
+                        />
+                      </svg>
+                    </div>
+                    :
+                    <div className="bg-[#84670A] bg-opacity-70 rounded-full w-12 h-12 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">{resource.fileType}</span>
+                    </div>
+                }
               </div>
               
               {/* Content */}
@@ -304,7 +330,7 @@ const handleDownload = (resource) => {
                 {viewType === 'list' && (
                   <p className="text-gray-600 text-sm mb-1 line-clamp-1">{resource.description}</p>
                 )}
-                <p className="text-gray-600 text-xs">By {resource.author}</p>
+                <p className="text-gray-600 text-xs line-clamp-1">{resource.source ? `Source: ${resource.source}` : `By ${resource.author}`}</p>
                 <p className="text-gray-600 text-xs">Updated {formatUpdatedAt(resource.updatedAt)}</p>
               </div>
             </div>
@@ -379,7 +405,7 @@ const handleDownload = (resource) => {
             <div className="grid grid-cols-2 gap-4 mb-6 text-brandGold">
               <div>
                 <p className="text-gray-500 text-sm">Type</p>
-                <p className="font-medium">{previewResource.fileType}</p>
+                <p className="font-medium">{getFileCategory(previewResource.fileType)}</p>
               </div>
               <div>
                 <p className="text-gray-500 text-sm">Size</p>
@@ -388,11 +414,7 @@ const handleDownload = (resource) => {
               <div>
                 <p className="text-gray-500 text-sm">Category</p>
                 <p className="font-medium">
-                  {previewResource.fileType === "PDF" || previewResource.fileType === "DOCX"
-                    ? "Docs"
-                    : previewResource.fileType === "XLSX"
-                    ? "Sheets"
-                    : "Slides"}
+                  {previewResource.category}
                 </p>
               </div>
               <div>
