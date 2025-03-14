@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="bg-brandGold text-white py-14">
       {/* Social Icons */}
       <div className="flex justify-center gap-6 space-x-6 mb-6 text-2xl">
-        <a href="#" className="hover:text-gray-300 transition">
+        <a href="https://my.linkedin.com/company/ifchamber" target="_blank" className="hover:text-gray-300 transition">
           {/* <FaLinkedinIn className="w-6 h-6" /> */}
           <FaLinkedin className="hover:text-[#0077B5] cursor-pointer transition-all" />
         </a>
@@ -35,10 +35,10 @@ export default function Footer() {
 
       {/* Footer Links */}
       <div className="flex justify-center space-x-4 text-sm mb-6 px-5 md:px-0">
-        <a href="#" className="hover:underline hover:text-gray-300 transition">
+        <a href="/about" className="hover:underline hover:text-gray-300 transition">
           About
         </a>
-        <a href="#" className="hover:underline hover:text-gray-300 transition">
+        <a href="/contact" className="hover:underline hover:text-gray-300 transition">
           Contact
         </a>
         <a href="#" className="hover:underline hover:text-gray-300 transition">

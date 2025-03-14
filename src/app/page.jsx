@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import TrendingContent from "./components/Trending";
 import Footer from "./components/Footer";
 import Partners from "./components/Partners";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaArrowUp } from "react-icons/fa";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -17,6 +17,27 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [heroColor, setHeroColor] = useState("white");
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollToTop(true);
+      } else {
+        setShowScrollToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -120,7 +141,7 @@ export default function Home() {
         >
           {/* Background Image */}
           <Image
-            src="/hero_bg.webp"
+            src="/assets/hero_bg.webp"
             alt="Hero Background"
             layout="fill"
             objectFit="cover"
@@ -128,25 +149,7 @@ export default function Home() {
             onLoad={() => setImageLoaded(true)}
           />
           <div className="pl-4 md:pl-12 max-w-6xl relative z-10 mb-20 -top-16">
-            {/* <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-              Empowering Ethical Finance
-              <br />
-              and Islamic Growth
-            </h1>
-            <p className="text-lg md:text-xl mb-8 max-w-2xl">
-              Dedicated to promoting the principles of Islamic finance, ethical
-              banking, and economic sustainability.
-            </p>
-            <div className="space-x-2 md:space-x-4">
-              <button className="bg-brandGold text-white px-2 py-2 relative group">
-                Request Invitation
-                <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
-              </button>
-              <button className="bg-[#025F1CCC] hover:bg-[#025F1E] text-white px-2 py-2 relative group">
-                View Charter
-                <hr className="border-t-4 mt-2 mb-[-3px] rounded w-full group-hover:w-5 transition-all duration-300 ease-in-out" />
-              </button>
-            </div> */}
+         
           </div>
         </section>
       )}
@@ -306,6 +309,16 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Scroll to Top Button */}
+      {showScrollToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 p-3 bg-brandGold text-white rounded-full shadow-lg hover:bg-opacity-90 transition-all duration-300 z-50"
+        >
+          <FaArrowUp size={24} />
+        </button>
+      )}
 
       {/* Trending Content Section */}
       <TrendingContent />

@@ -12,8 +12,8 @@ export default function Navbar(props) {
   const thoughtLeadershipRef = useRef(null);
   const expertiseRef = useRef(null);
   const [logos, setLogos] = useState({
-    dashboard: "/logo_pattern.png",
-    site: "/logo.png",
+    dashboard: "/assets/logo_pattern.png",
+    site: "/assets/logo.png",
   });
 
   useEffect(() => {
@@ -87,10 +87,12 @@ export default function Navbar(props) {
     props.isHome && !isMobileMenuOpen
       ? "hover:text-brandGold transition-colors duration-300"
       : props.isHome && isMobileMenuOpen
-      ? "text-black hover:text-brandGold transition-colors duration-300"
+        ? "text-black hover:text-brandGold transition-colors duration-300"
+        : props.resources && !isMobileMenuOpen
+      ? "text-white hover:text-[#E0D5C0] transition-colors duration-300"
       : "text-gray-700 hover:text-brandGold transition-colors duration-300";
 
-  const activeColorClass = "text-brandGold"; // Active state color
+  const activeColorClass = props.resources ? "text-[#E0D5C0]" : "text-brandGold"; // Active state color
 
 const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor } : {};
   
@@ -132,7 +134,7 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
     <nav
       className={`md:w-full w-screen shadow-sm z-50 ${
         props.isHome ? "absolute" : "relative"
-        } ${isMobileMenuOpen ? "bg-white" : "bg-transparent"}`}
+        } ${isMobileMenuOpen ? "bg-white" : props.resources && !isMobileMenuOpen ? "bg-brandGold" : "bg-transparent"}`}
       style={textStyle}
     >
       {/* Top Row */}
@@ -142,10 +144,10 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
           className={`block md:hidden w-1/12 ${
             isMobileMenuOpen && props.isHome
               ? "text-brandGold"
-                ? isMobileMenuOpen && !props.isHome
+                ? isMobileMenuOpen && !props.isHome && !props.resources
                 : "text-black"
               : "text-gray-800"
-          } hover:text-brandGold transition-colors duration-300`}
+          } transition-colors duration-300`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           <svg
@@ -168,7 +170,7 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
         >
           <div className="w-40">
             <Image
-              src={props.isHome ? logos.dashboard : logos.site}
+              src={props.isHome || props.resources ? logos.dashboard : logos.site}
               alt="Islamic Finance Logo"
               width={87}
               height={60}
@@ -202,7 +204,16 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
             >
               Opportunities
             </Link>
-            <div className="relative group">
+            <Link
+              href="/resources"
+              className={
+                props.resources ? activeColorClass : textColorClass
+              }
+              style={textStyle}
+            >
+              Resources
+            </Link>
+            {/* <div className="relative group">
               <button
                 className={`${
                   props.isResources ? activeColorClass : textColorClass
@@ -224,7 +235,7 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
                   />
                 </svg>
               </button>
-            </div>
+            </div> */}
             <Link
               href="/contact"
               className={props.isContact ? activeColorClass : textColorClass}
@@ -494,6 +505,16 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
                 }`}
               >
                 News
+              </Link>
+            </li>
+            <li className="border-b">
+              <Link
+                href="/resources"
+                className={`block px-4 py-3 text-left ${
+                  props.resources ? activeColorClass : textColorClass
+                }`}
+              >
+                Resources
               </Link>
             </li>
             <li className="border-b">

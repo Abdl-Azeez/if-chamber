@@ -85,12 +85,12 @@ const visibleNews = data.news.filter((news) => news.visible);
 
         {/* IFChamber News Section */}
         {ifChamberNews.length > 0 && (
-          <div className="px-6 lg:px-12 py-10">
-            <h2 className="text-2xl font-bold mb-6 text-brandGold">IFChamber News</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="px-6 lg:px-12 py-10 flex flex-col items-center">
+            <h2 className="text-xl font-bold mb-6 text-brandGold self-start pl-24">IFChamber News</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-10/12">
               {loading
                 ? Array(3).fill(0).map((_, index) => (
-                  <div key={index} className="bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative">
+                  <div key={index} className="bg-white pb-12 shadow border-t-2 border-brandGold p-6 relative">
                     <p className="text-sm text-gray-500">News</p>
                     <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">Fetching News...</h2>
                     <p className="text-gray-600 line-clamp-3">Please wait a moment while we fetch the latest news.</p>
@@ -99,13 +99,13 @@ const visibleNews = data.news.filter((news) => news.visible);
                 : ifChamberNews.map((item) => (
                   <Link key={item._id} href={`/news/${item._id}`} passHref>
                   <div
-  className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative h-full sm:h-72 md:h-80 lg:h-96"
+  className="cursor-pointer bg-white pb-12  shadow border-t-2 border-brandGold p-6 relative h-full sm:h-72 md:h-80 lg:h-96"
 >
                     <p className="text-sm text-gray-500">IFChamber News</p>
                     <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">{item.title}</h2>
                     <div className="text-gray-600 line-clamp-3">
                       <ReactMarkdown>{item.description}</ReactMarkdown></div>
-                    <p className="text-sm text-gray-500 absolute bottom-4">Source: IFChamber</p>
+                    <p className="text-sm text-gray-500 absolute bottom-4 line-clamp-1">Source: IFChamber</p>
                     </div>
                     </Link>
                 ))}
@@ -122,7 +122,7 @@ const visibleNews = data.news.filter((news) => news.visible);
                   {loadingMoreIfChamber ? (
                     <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full block"></span>
                   ) : (
-                    <span className="text-xl">SEE MORE IFCHAMBER NEWS &gt;</span>
+                    <span className="text-md">SEE MORE IFCHAMBER NEWS &gt;</span>
                   )}
                 </button>
               </div>
@@ -130,12 +130,12 @@ const visibleNews = data.news.filter((news) => news.visible);
           </div>
         )}
         {/* Islamic Finance News Section (RSS) */}
-        <div className="px-6 lg:px-12 py-10">
-          {ifChamberTotal !== null && <h2 className="text-2xl font-bold mb-6 text-brandGold">Others</h2>}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="px-6 lg:px-12 py-10 flex flex-col items-center">
+          {ifChamberTotal !== null && <h2 className="text-xl font-bold mb-6 text-brandGold self-start pl-24">Others</h2>}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-10/12">
             {loading
               ? Array(3).fill(0).map((_, index) => (
-                  <div key={index} className="bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative">
+                  <div key={index} className="bg-white pb-12 shadow border-t-2 border-brandGold p-6 relative">
                     <p className="text-sm text-gray-500">News</p>
                     <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">Fetching News...</h2>
                     <p className="text-gray-600 line-clamp-3">Please wait a moment while we fetch the latest news.</p>
@@ -145,13 +145,13 @@ const visibleNews = data.news.filter((news) => news.visible);
                 
                   <div
                     key={item.link}
-                    className="cursor-pointer bg-white pb-12 rounded-lg shadow-lg border-t-2 border-brandGold p-6 relative" 
+                    className="cursor-pointer bg-white pb-12 shadow border-t-2 border-brandGold p-6 relative" 
                     onClick={() => window.open(item.link, "_blank")}
                   >
                     <p className="text-sm text-gray-500">News</p>
                     <h2 className="font-semibold text-lg my-8 line-clamp-3 text-gray-500">{item.title}</h2>
                     <p className="text-gray-600 line-clamp-3">{item.description}</p>
-                    <p className="text-sm text-gray-500 absolute bottom-4">Source: {item.source}</p>
+                    <p className="text-sm text-gray-500 absolute bottom-4 line-clamp-1">Source: {item.source}</p>
                   </div>
                 ))}
           </div>
@@ -166,7 +166,7 @@ const visibleNews = data.news.filter((news) => news.visible);
               {loadingMoreRss ? (
                 <span className="animate-spin border-2 border-white border-t-transparent w-5 h-5 rounded-full block"></span>
               ) : (
-                <span className="text-xl">SEE MORE ISLAMIC FINANCE NEWS &gt;</span>
+                <span className="text-md">SEE MORE ISLAMIC FINANCE NEWS &gt;</span>
               )}
             </button>
           </div>

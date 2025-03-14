@@ -6,9 +6,9 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useRef } from "react";
 
 const partners = [
-  { id: 1, src: "/partner_sayafrica.png", alt: "Say Africa" },
-  { id: 2, src: "/partner_lifr.png", alt: "Islamic Finance Review" },
-  { id: 3, src: "/partner_ifc.png", alt: "Islamic Finance Connect" },
+  { id: 1, src: "/assets/partner_sayafrica.png", alt: "Say Africa" },
+  { id: 2, src: "/assets/partner_lifr.png", alt: "Islamic Finance Review" },
+  { id: 3, src: "/assets/partner_ifc.png", alt: "Islamic Finance Connect" },
 ];
 
 export default function PartnersSlider() {

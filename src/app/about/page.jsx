@@ -7,7 +7,7 @@ import { getLogos } from "@/utils/getLogos";
 import { useEffect, useState } from "react";
 
 export default function AboutPage() {
-  const [siteLogo, setSiteLogo] = useState("/logo.png"); // Default fallback
+  const [siteLogo, setSiteLogo] = useState("/assets/logo.png"); // Default fallback
 
   useEffect(() => {
     const fetchLogo = async () => {

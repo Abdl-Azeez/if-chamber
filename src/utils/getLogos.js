@@ -8,11 +8,11 @@ export const getLogos = async () => {
     return {
       dashboard:
         logos.find((logo) => logo.type === "dashboard")?.image ||
-        "/logo_pattern.png",
-      site: logos.find((logo) => logo.type === "site")?.image || "/logo.png",
+        "/assets/logo_pattern.png",
+      site: logos.find((logo) => logo.type === "site")?.image || "/assets/logo.png",
     };
   } catch (error) {
     console.error("Error fetching logos:", error);
-    return { dashboard: "/logo_pattern.png", site: "/logo.png" }; // Default fallback
+    return { dashboard: "/assets/logo_pattern.png", site: "/assets/logo.png" }; // Default fallback
   }
 };

@@ -75,10 +75,10 @@ export default function IFChamberNewsDetails() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar isNews={true} />
-      <main className="flex-grow px-3 md:px-12 md:pt-12 pb-12 md:pb-24">
+      <main className="flex-grow  md:pt-12 pb-12 md:pb-24">
         {/* Hero Section */}
         <div
-          className={`relative w-full h-64 md:h-[50dvh] flex items-end justify-left text-white text-left px-6 lg:px-16 bg-brandGold`}
+          className={`relative w-full h-64 md:h-[50dvh] flex flex-col items-center justify-center text-white text-center px-6 lg:px-16 bg-brandGold`}
           style={
             news.image
               ? {
@@ -89,14 +89,29 @@ export default function IFChamberNewsDetails() {
               : {}
           }
         >
-                  {news.image && <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-                  }<h1 className="mb-24 relative text-2xl md:text-4xl font-bold !leading-relaxed max-w-3/4 mt-10">{news.title}</h1>
+          {news.image && <div className="absolute inset-0 bg-black bg-opacity-50"></div>}
+          <div className="relative text-center">
+            <div className="text-sm md:text-lg mb-4">{new Date(news.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+            <h1 className="text-2xl md:text-4xl font-bold !leading-relaxed">{news.title}</h1>
+        </div>
         </div>
 
         {/* Content Section */}
-        <div className="react-markdown w-full text-justify mb-24 md:mb-96 py-10 text-gray-800 leading-relaxed">
-          <ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]} >{news.description}</ReactMarkdown>
+        <div className="grid grid-cols-1 md:grid-cols-[5fr_1fr] gap-2 mt-10 px-12 md:px-40">
+        {/* Main Content Section */}
+        <div className="react-markdown text-justify text-gray-800 leading-relaxed border-r border-gray-200 pr-8">
+            <ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>
+                {news.description}
+            </ReactMarkdown>
         </div>
+
+        {/* Related Section */}
+        <div className="react-markdown text-justify text-gray-800 leading-relaxed">
+            {/* <h2 className="text-xl font-bold mb-4">Related</h2> */}
+            {/* Placeholder for related content */}
+            {/* <p>Related content goes here...</p> */}
+        </div>
+    </div>
 
      
       </main>
