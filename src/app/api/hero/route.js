@@ -6,17 +6,32 @@ export async function GET(req) {
   await connectToDatabase();
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+  
   if (id) {
     const heroItem = await Hero.findById(id);
-    return Response.json({ hero: heroItem });
+    return Response.json({ hero: heroItem }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   }
+  
   const heroes = await Hero.find().sort({ createdAt: -1 });
-  return Response.json({ heroes });
+  return Response.json({ heroes }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    },
+  });
 }
 
 export async function POST(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   const hero = new Hero(body);
   await hero.save();
@@ -34,7 +49,11 @@ export async function POST(req) {
 
 export async function PUT(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
 
   try {
     const body = await req.json();
@@ -61,10 +80,14 @@ export async function PUT(req) {
   }
 }
 
-
 export async function DELETE(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   await Hero.findByIdAndDelete(body.id);
   return Response.json({ message: "Hero section deleted successfully!" });

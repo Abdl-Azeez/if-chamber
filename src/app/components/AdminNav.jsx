@@ -1,25 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { logout, isAuthenticated } from "@/utils/adminApi";
 
 export default function AdminNav({ active }) {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Clear JWT from localStorage or cookies
-    localStorage.removeItem("token");
-
-    // Redirect to login page
-    router.push("/admin/login");
+    logout();
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (
-      !token &&
-      router.pathname !== "/admin/signup" &&
-      router.pathname !== "/admin/login"
-    ) {
+    if (!isAuthenticated()) {
       router.push("/admin/login");
     }
   }, [router]);
@@ -74,14 +66,22 @@ export default function AdminNav({ active }) {
         </a>
         <a
           href="/admin/resources"
-          className={`hover:text-blue-300 hover:underline transition-colors duration-500 ${
+          className={`mr-10 hover:text-blue-300 hover:underline transition-colors duration-500 ${
             active === "resource" ? "underline text-blue-400 font-bold" : ""
           }`}
         >
           Resources
         </a>
+        <a
+          href="/admin/about"
+          className={`mr-10 hover:text-blue-300 hover:underline transition-colors duration-500 ${
+            active === "about" ? "underline text-blue-400 font-bold" : ""
+          }`}
+        >
+          About
+        </a>
       </div>
-      <button onClick={handleLogout} className="text-red-400">
+      <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition-colors">
         Logout
       </button>
     </nav>

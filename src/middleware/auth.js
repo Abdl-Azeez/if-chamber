@@ -4,7 +4,7 @@ export function authenticateToken(req) {
   const token = req.headers.get("authorization")?.split(" ")[1];
 
   if (!token) {
-    return { error: "Unauthorized: No token provided" };
+    return { error: "Access token required" };
   }
 
   try {
@@ -12,12 +12,19 @@ export function authenticateToken(req) {
 
     // ✅ Ensure `adminId` exists
     if (!decoded.adminId) {
-      return { error: "Unauthorized: Invalid token structure" };
+      return { error: "Invalid token structure" };
     }
 
     return { adminId: decoded.adminId }; // 🔥 Correct field name
   } catch (error) {
     console.error("🚨 JWT Error:", error);
-    return { error: "Unauthorized: Invalid token" };
+    
+    if (error.name === 'TokenExpiredError') {
+      return { error: "Token expired. Please login again." };
+    } else if (error.name === 'JsonWebTokenError') {
+      return { error: "Invalid token. Please login again." };
+    } else {
+      return { error: "Authentication failed. Please login again." };
+    }
   }
 }

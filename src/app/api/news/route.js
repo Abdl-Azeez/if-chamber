@@ -7,10 +7,16 @@ export async function GET(req) {
   await connectToDatabase();
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+  
   if (id) {
     const newsItem = await News.findById(id);
-    return Response.json({ news: newsItem });
+    return Response.json({ news: newsItem }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   }
+  
   const page = parseInt(searchParams.get("page")) || 1;
   const limit = parseInt(searchParams.get("limit")) || 10;
   const total = await News.countDocuments();
@@ -18,15 +24,21 @@ export async function GET(req) {
     .skip((page - 1) * limit)
     .limit(limit)
     .sort({ createdAt: -1 });
-  return Response.json({ news, total });
+    
+  return Response.json({ news, total }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    },
+  });
 }
 
 export async function POST(req) {
-  // const auth = authenticateToken(req);
-  // if (auth.error)
-  //   return Response.json({ message: auth.error }, { status: 401 });
-
   await connectToDatabase();
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
   
   const body = await req.json();
 
@@ -42,7 +54,12 @@ export async function POST(req) {
 
 export async function PUT(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   const { id, ...updateData } = body;
   await News.findByIdAndUpdate(id, updateData);
@@ -51,7 +68,12 @@ export async function PUT(req) {
 
 export async function DELETE(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   await News.findByIdAndDelete(body.id);
   return Response.json({ message: "News deleted successfully!" });

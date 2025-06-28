@@ -41,6 +41,19 @@ body {
   font-size: 20px; /* Adjust arrow size */
 }
 
+/* Hero slider arrows - responsive background */
+.slick-prev,
+.slick-next {
+  background: transparent !important;
+}
+
+@media (min-width: 768px) {
+  .slick-prev,
+  .slick-next {
+    background: rgba(255, 255, 255, 0.8) !important;
+  }
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

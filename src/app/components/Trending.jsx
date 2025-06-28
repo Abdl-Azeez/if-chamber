@@ -1,27 +1,36 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-
-export default function TrendingContent() {
-  const [trendingContents, setTrendingContents] = useState([]);
-
+export default function TrendingContent({ initialTrending = [] }) {
+  const [trendingContents, setTrendingContents] = useState(initialTrending);
   const [hoveredContent, setHoveredContent] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const hasFetched = useRef(false);
+
   useEffect(() => {
+    if (initialTrending.length === 0 && !hasFetched.current) {
     fetchTrending();
-  }, []);
+    } else if (initialTrending.length > 0) {
+      setTrendingContents(initialTrending.sort((a, b) => a.position - b.position));
+    }
+  }, [initialTrending]);
 
   const fetchTrending = async () => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+    
     const res = await fetch("/api/trending");
     const data = await res.json();
     setTrendingContents(data.sort((a, b) => a.position - b.position));
   };
+
   return (
     <div
       className="min-h-auto md:min-h-screen mt-16 lg:mt-8 w-screen"
       style={{
         backgroundImage: hoveredContent
           ? `url(${hoveredContent.image})`
-          : "url(/assets/trending_bg.webp)",
+          : `url(${trendingContents.length > 0 ? trendingContents[0]?.image : "/assets/trending_bg.webp"})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         transition: "background-image 0.5s ease-in-out",
