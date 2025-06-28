@@ -6,12 +6,22 @@ export async function GET(req) {
   await connectToDatabase();
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+  
   if (id) {
     const heroItem = await Hero.findById(id);
-    return Response.json({ hero: heroItem });
+    return Response.json({ hero: heroItem }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   }
+  
   const heroes = await Hero.find().sort({ createdAt: -1 });
-  return Response.json({ heroes });
+  return Response.json({ heroes }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    },
+  });
 }
 
 export async function POST(req) {

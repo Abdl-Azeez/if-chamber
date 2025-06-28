@@ -7,10 +7,16 @@ export async function GET(req) {
   await connectToDatabase();
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+  
   if (id) {
     const newsItem = await News.findById(id);
-    return Response.json({ news: newsItem });
+    return Response.json({ news: newsItem }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   }
+  
   const page = parseInt(searchParams.get("page")) || 1;
   const limit = parseInt(searchParams.get("limit")) || 10;
   const total = await News.countDocuments();
@@ -18,7 +24,12 @@ export async function GET(req) {
     .skip((page - 1) * limit)
     .limit(limit)
     .sort({ createdAt: -1 });
-  return Response.json({ news, total });
+    
+  return Response.json({ news, total }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    },
+  });
 }
 
 export async function POST(req) {

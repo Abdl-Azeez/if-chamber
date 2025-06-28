@@ -11,7 +11,7 @@ export default function HeroAdmin() {
     image: "",
     buttons: [],
     visible: true,
-    textColor: ""
+    textColor: "#000000"
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -60,7 +60,7 @@ export default function HeroAdmin() {
         image: "",
         buttons: [],
         visible: true,
-        textColor: "",
+        textColor: "#000000",
       });
       fetchHeroes();
     } catch (err) {
@@ -71,7 +71,10 @@ export default function HeroAdmin() {
   };
 
   const handleEdit = (hero) => {
-    setForm(hero);
+    setForm({
+      ...hero,
+      textColor: hero.textColor || "#000000" // Default to black if no textColor is set
+    });
   };
 
   const handleDelete = async (id) => {

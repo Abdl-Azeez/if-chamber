@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { getLogos } from "@/utils/getLogos";
 import { useState, useEffect, useRef } from "react";
 
 export default function Navbar(props) {
@@ -11,18 +10,12 @@ export default function Navbar(props) {
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
   const thoughtLeadershipRef = useRef(null);
   const expertiseRef = useRef(null);
-  const [logos, setLogos] = useState({
+
+  // Use static logos instead of fetching from API
+  const logos = {
     dashboard: "/assets/logo_pattern.png",
     site: "/assets/logo.png",
-  });
-
-  useEffect(() => {
-    const fetchLogos = async () => {
-      const fetchedLogos = await getLogos();
-      setLogos(fetchedLogos);
-    };
-    fetchLogos();
-  }, []);
+  };
 
   const thoughtLeadership = [
     {
@@ -64,15 +57,15 @@ export default function Navbar(props) {
 
   const expertise = [
     {
-      title: "Shari’ah Advisory & Compliance",
+      title: "Shari'ah Advisory & Compliance",
       articles: [
-        "Shari’ah-compliant business structuring Shari’ah board establishment & governance Islamic financial product development Shari’ah compliance audits & reviews",
+        "Shari'ah-compliant business structuring Shari'ah board establishment & governance Islamic financial product development Shari'ah compliance audits & reviews",
       ],
     },
     {
       title: "Training & Capacity Building",
       articles: [
-        "Islamic finance certification courses Executive training for financial institutions Workshops on Shari’ah compliance & governance",
+        "Islamic finance certification courses Executive training for financial institutions Workshops on Shari'ah compliance & governance",
       ],
     },
     {
@@ -546,7 +539,7 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
                 <ul className="pl-8 space-y-2 text-brandGold">
   <li>
     <Link href="/shariah-advisory-compliance" className="hover:underline">
-      Shari’ah Advisory & Compliance
+      Shari'ah Advisory & Compliance
     </Link>
   </li>
   <li>

@@ -71,8 +71,8 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         setHeroes(data.heroes.filter((hero) => hero.visible !== false));
-        if (visibleHeroes.length > 0) {
-          setHeroColor(visibleHeroes[0].textColor || "white"); 
+        if (data.heroes.length > 0) {
+          setHeroColor(data.heroes[0].textColor || "white"); 
         }
         setHeroLoading(false);
       })
@@ -84,9 +84,9 @@ export default function Home() {
 
   useEffect(() => {
     if (heroes.length > 0) {
-      setHeroColor(heroes[0].textColor)
+      setHeroColor(heroes[0].textColor || "white");
     }
-  },[heroes])
+  }, [heroes]);
 
   const handleHeroChange = (index) => {
     if (heroes[index]) {
@@ -122,7 +122,6 @@ export default function Home() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
-    
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     beforeChange: (oldIndex, newIndex) => handleHeroChange(newIndex),

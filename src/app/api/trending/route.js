@@ -4,8 +4,13 @@ import Trending from "@/models/Trending";
 
 export async function GET() {
   await connectToDatabase();
-  const trendingItems = await Trending.find({});
-  return Response.json(trendingItems, { status: 200 });
+  const trendingItems = await Trending.find({}).lean();
+  return Response.json(trendingItems, { 
+    status: 200,
+    headers: {
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    },
+  });
 }
 
 export async function POST(req) {
