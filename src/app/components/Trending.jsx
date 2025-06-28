@@ -30,7 +30,7 @@ export default function TrendingContent({ initialTrending = [] }) {
       style={{
         backgroundImage: hoveredContent
           ? `url(${hoveredContent.image})`
-          : `url(${trendingContents[0]?.image})`,
+          : `url(${trendingContents.length > 0 ? trendingContents[0]?.image : "/assets/trending_bg.webp"})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         transition: "background-image 0.5s ease-in-out",

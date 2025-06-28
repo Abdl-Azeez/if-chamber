@@ -149,10 +149,10 @@ const handleDownload = (resource) => {
   {/* Header */}
   <Navbar resources={true} />
 
-  <main className="container mx-auto px-4 py-8">
+  <main className="container mx-auto px-4 py-6 md:py-8">
     {/* Featured Resource Section */}
-    <section className="mb-10">
-      <h2 className="text-[#84670A] text-2xl font-bold mb-4">Recently Added</h2>
+    <section className="mb-8 md:mb-10">
+      <h2 className="text-[#84670A] text-xl md:text-2xl font-bold mb-4">Recently Added</h2>
       
       {featuredResource && (
         <div

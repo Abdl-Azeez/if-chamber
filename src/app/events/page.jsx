@@ -82,14 +82,14 @@ export default function EventsPage() {
       <div className="bg-gray-100 min-h-screen pb-28">
         {bannerEvent && (
           <div
-            className="relative w-full h-[40dvh] sm:h-[50dvh] md:h-[60dvh] flex flex-col items-center justify-center bg-cover bg-center px-4"
+            className="relative w-full h-[35dvh] sm:h-[40dvh] md:h-[50dvh] lg:h-[60dvh] flex flex-col items-center justify-center bg-cover bg-center px-4"
             style={{ backgroundImage: `url(/assets/eventBannerBg.png)` }}
           >
-            <div className="flex flex-col items-center bg-white bg-opacity-60 px-6 sm:px-12 py-6 sm:py-8 text-center shadow-lg relative">
-              <div className="bg-brandGold text-white px-6 sm:px-12 py-2 rounded-tl-lg rounded-tr-lg flex items-center space-x-2 sm:space-x-3">
+            <div className="flex flex-col items-center bg-white bg-opacity-60 px-4 sm:px-6 md:px-12 py-4 sm:py-6 md:py-8 text-center shadow-lg relative">
+              <div className="bg-brandGold text-white px-4 sm:px-6 md:px-12 py-2 rounded-tl-lg rounded-tr-lg flex items-center space-x-2 sm:space-x-3">
                 {bannerEvent?.theme ? (
                   <div className="text-center">
-                    <p className="text-sm sm:text-lg font-semibold">
+                    <p className="text-xs sm:text-sm md:text-lg font-semibold">
                       {bannerEvent?.theme}
                     </p>
                     <p className="text-xs sm:text-sm font-bold text-yellow-300">
@@ -99,25 +99,25 @@ export default function EventsPage() {
                 ) : null}
               </div>
 
-              <h2 className="text-lg sm:text-2xl w-5/6 font-bold text-gray-900 mt-4 sm:mt-8">
+              <h2 className="text-base sm:text-lg md:text-2xl w-5/6 font-bold text-gray-900 mt-3 sm:mt-4 md:mt-8">
                 {bannerEvent.title}
               </h2>
-              <p className="text-sm sm:text-lg font-semibold text-gray-700 mt-4 sm:mt-8">
+              <p className="text-xs sm:text-sm md:text-lg font-semibold text-gray-700 mt-3 sm:mt-4 md:mt-8">
                 {new Date(bannerEvent.date).toDateString()}
               </p>
             </div>
             <Link href={`/events/${bannerEvent._id}`} passHref>
-              <button className="mt-6 sm:mt-8 bg-brandGold text-white px-8 sm:px-12 py-4 sm:py-6 hover:bg-yellow-600 transition-all duration-300 ease-in-out">
+              <button className="mt-4 sm:mt-6 md:mt-8 bg-brandGold text-white px-6 sm:px-8 md:px-12 py-3 sm:py-4 md:py-6 hover:bg-yellow-600 transition-all duration-300 ease-in-out text-sm md:text-base">
                 More Details
               </button>
             </Link>
           </div>
         )}
 
-        <div className="container mx-auto px-4 sm:px-6 py-10">
-          <div className="flex space-x-4 sm:space-x-6 border-b mb-6">
+        <div className="container mx-auto px-4 sm:px-6 py-8 md:py-10">
+          <div className="flex space-x-4 sm:space-x-6 border-b mb-4 md:mb-6">
             <button
-              className={`pb-2 ${
+              className={`pb-2 text-sm md:text-base ${
                 activeTab === "upcoming"
                   ? "border-b-2 border-brandGold text-brandGold"
                   : "text-gray-700 hover:text-brandGold transition-all duration-300 ease-linear"
@@ -127,7 +127,7 @@ export default function EventsPage() {
               Upcoming Events
             </button>
             <button
-              className={`pb-2 ${
+              className={`pb-2 text-sm md:text-base ${
                 activeTab === "past"
                   ? "border-b-2 border-brandGold text-brandGold"
                   : "text-gray-700 hover:text-brandGold transition-all duration-300 ease-linear"
@@ -138,11 +138,11 @@ export default function EventsPage() {
             </button>
           </div>
           {events[activeTab].length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 sm:h-72 md:h-80 lg:h-96">
+            <div className="flex flex-col items-center justify-center h-48 sm:h-64 md:h-72 lg:h-80 xl:h-96">
   <div className="text-center px-4 sm:px-6">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-12 w-12 sm:h-16 sm:w-16 text-gray-400 mx-auto mb-3 sm:mb-4"
+      className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 text-gray-400 mx-auto mb-3 sm:mb-4"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -154,7 +154,7 @@ export default function EventsPage() {
         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
       />
     </svg>
-    <p className="text-gray-600 text-base sm:text-lg font-semibold mb-2">
+    <p className="text-gray-600 text-sm sm:text-base md:text-lg font-semibold mb-2">
       No events available.
     </p>
     <p className="text-gray-500 text-xs sm:text-sm">
@@ -163,12 +163,12 @@ export default function EventsPage() {
   </div>
 </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
               {(activeTab === "past" ? events.past : events.upcoming).map(
                 (event) => (
                   <Link key={event._id} href={`/events/${event._id}`} passHref>
                     <div className="cursor-pointer bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ease-in-out">
-                      <div className="relative w-full h-48 sm:h-64 overflow-hidden rounded-lg">
+                      <div className="relative w-full h-40 sm:h-48 md:h-64 overflow-hidden rounded-lg">
                         <Image
                           src={event.image}
                           alt={event.title}
@@ -178,8 +178,8 @@ export default function EventsPage() {
                         />
                       </div>
 
-                      <div className="p-4">
-                        <h3 className="text-base sm:text-lg font-bold text-brandGold">
+                      <div className="p-3 md:p-4">
+                        <h3 className="text-sm sm:text-base md:text-lg font-bold text-brandGold">
                           {event.title}
                         </h3>
                         <p className="text-xs sm:text-sm text-gray-600">
@@ -197,7 +197,7 @@ export default function EventsPage() {
             ((activeTab === "past" && hasMorePast) ||
               (activeTab === "upcoming" && hasMoreUpcoming)) && (
               <button
-                className="mt-6 px-8 sm:px-12 py-4 sm:py-6 bg-brandGold text-white"
+                className="mt-6 px-6 sm:px-8 md:px-12 py-3 sm:py-4 md:py-6 bg-brandGold text-white text-sm md:text-base"
                 onClick={() => loadMoreEvents(activeTab)}
               >
                 See More Events &rarr;

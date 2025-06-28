@@ -26,7 +26,12 @@ export async function GET(req) {
 
 export async function POST(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   const hero = new Hero(body);
   await hero.save();
@@ -44,7 +49,11 @@ export async function POST(req) {
 
 export async function PUT(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
 
   try {
     const body = await req.json();
@@ -71,10 +80,14 @@ export async function PUT(req) {
   }
 }
 
-
 export async function DELETE(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   await Hero.findByIdAndDelete(body.id);
   return Response.json({ message: "Hero section deleted successfully!" });

@@ -33,11 +33,12 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  // const auth = authenticateToken(req);
-  // if (auth.error)
-  //   return Response.json({ message: auth.error }, { status: 401 });
-
   await connectToDatabase();
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
   
   const body = await req.json();
 
@@ -53,7 +54,12 @@ export async function POST(req) {
 
 export async function PUT(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   const { id, ...updateData } = body;
   await News.findByIdAndUpdate(id, updateData);
@@ -62,7 +68,12 @@ export async function PUT(req) {
 
 export async function DELETE(req) {
   await connectToDatabase();
-  await authenticateToken(req);
+  
+  const auth = authenticateToken(req);
+  if (auth.error) {
+    return Response.json({ error: auth.error }, { status: 401 });
+  }
+  
   const body = await req.json();
   await News.findByIdAndDelete(body.id);
   return Response.json({ message: "News deleted successfully!" });
