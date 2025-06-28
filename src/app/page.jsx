@@ -97,25 +97,75 @@ export default function Home() {
   const NextArrow = ({ className, style, onClick }) => (
     <button
       className={className}
-      style={{ ...style, display: "block", right: "40px", zIndex: 10 }}
+      style={{ 
+        ...style, 
+        display: "block", 
+        right: "10px", 
+        top: "57%",
+        zIndex: 10,
+        transform: "translateY(-50%)",
+        background: "transparent",
+        borderRadius: "50%",
+        width: "40px",
+        height: "40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "none",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        zIndex: 10,
+      }}
       onClick={onClick}
     >
-      <FaChevronRight size={40} color="#84670A" />
+      <FaChevronRight 
+        size={20} 
+        color="#84670A" 
+        className="md:w-5 md:h-5 w-4 h-4"
+        style={{
+          filter: "drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))"
+        }}
+      />
     </button>
   );
 
   const PrevArrow = ({ className, style, onClick }) => (
     <button
       className={className}
-      style={{ ...style, display: "block", left: "10px", zIndex: 10 }}
+      style={{ 
+        ...style, 
+        display: "block", 
+        left: "10px", 
+        top: "57%",
+        zIndex: 10,
+        transform: "translateY(-50%)",
+        background: "transparent",
+        borderRadius: "50%",
+        width: "40px",
+        height: "40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "none",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        zIndex: 10,
+      }}
       onClick={onClick}
     >
-      <FaChevronLeft size={40} color="#84670A" />
+      <FaChevronLeft 
+        size={20} 
+        color="#84670A" 
+        className="md:w-5 md:h-5 w-4 h-4"
+        style={{
+          filter: "drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))"
+        }}
+      />
     </button>
   );
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
