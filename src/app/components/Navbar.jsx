@@ -10,12 +10,19 @@ export default function Navbar(props) {
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
   const thoughtLeadershipRef = useRef(null);
   const expertiseRef = useRef(null);
-
-  // Use static logos instead of fetching from API
-  const logos = {
+   const [logos, setLogos] = useState({
     dashboard: "/assets/logo_pattern.png",
     site: "/assets/logo.png",
-  };
+  });
+
+  useEffect(() => {
+    const fetchLogos = async () => {
+      const fetchedLogos = await getLogos();
+      setLogos(fetchedLogos);
+    };
+    fetchLogos();
+  }, []);
+  
 
   const thoughtLeadership = [
     {
