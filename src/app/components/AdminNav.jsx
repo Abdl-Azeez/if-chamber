@@ -74,7 +74,7 @@ export default function AdminNav({ active }) {
         </a>
         <a
           href="/admin/about"
-          className={`mr-10 hover:text-blue-300 hover:underline transition-colors duration-500 ${
+          className={`hover:text-blue-300 hover:underline transition-colors duration-500 ${
             active === "about" ? "underline text-blue-400 font-bold" : ""
           }`}
         >
