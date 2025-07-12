@@ -8,6 +8,9 @@ export default function Navbar(props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isThoughtLeadershipOpen, setIsThoughtLeadershipOpen] = useState(false);
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef(null);
+  const searchBoxRef = useRef(null);
   const thoughtLeadershipRef = useRef(null);
   const expertiseRef = useRef(null);
    const [logos, setLogos] = useState({
@@ -128,6 +131,27 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
       setIsThoughtLeadershipOpen(false);
     }
   }, [isThoughtLeadershipOpen, isExpertiseOpen]);
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+    function handleClickOutside(e) {
+      if (
+        isSearchOpen &&
+        searchBoxRef.current &&
+        !searchBoxRef.current.contains(e.target)
+      ) {
+        setIsSearchOpen(false);
+      }
+    }
+    if (isSearchOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isSearchOpen]);
 
 
   return (
@@ -380,7 +404,7 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
             >
               Expert Community
             </Link>
-            <button className="p-2">
+            <button className="p-2" onClick={() => setIsSearchOpen((v) => !v)} aria-label="Open search">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -396,6 +420,36 @@ const textStyle = props.isHome && !isMobileMenuOpen ? { color: props.heroColor }
               </svg>
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Desktop Search Input (slide down) */}
+      <div
+        ref={searchBoxRef}
+        className={`fixed left-0 top-0 w-full z-50 transition-all duration-300 ease-in-out ${isSearchOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} flex justify-center`}
+        style={{
+          transform: isSearchOpen ? 'translateY(0)' : 'translateY(-40px)',
+        }}
+      >
+        <div className="w-full md:w-1/2 bg-white shadow-2xl rounded-b-xl px-6 py-4 flex items-center gap-3 mt-16">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" strokeWidth="2" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" strokeWidth="2" />
+          </svg>
+          <input
+            ref={searchInputRef}
+            type="text"
+            placeholder="Search..."
+            className="w-full bg-transparent outline-none text-lg text-gray-700"
+            onKeyDown={e => {
+              if (e.key === 'Escape' || e.key === 'Enter') setIsSearchOpen(false);
+            }}
+          />
+          <button onClick={() => setIsSearchOpen(false)} className="ml-2 text-gray-400 hover:text-gray-700" aria-label="Close search">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
 

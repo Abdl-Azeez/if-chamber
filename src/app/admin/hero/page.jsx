@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import AdminNav from "@/app/components/AdminNav";
+import { adminApiCall } from "@/utils/adminApi";
 
 export default function HeroAdmin() {
   const [heroes, setHeroes] = useState([]);
@@ -49,9 +50,8 @@ export default function HeroAdmin() {
     setError("");
     const method = form._id ? "PUT" : "POST";
     try {
-      await fetch("/api/hero", {
+      await adminApiCall("/api/hero", {
         method,
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form._id ? { id: form._id, ...form } : form),
       });
       setForm({
@@ -81,9 +81,8 @@ export default function HeroAdmin() {
     setLoading(true);
     setError("");
     try {
-      await fetch("/api/hero", {
+      await adminApiCall("/api/hero", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
       fetchHeroes();
@@ -241,17 +240,26 @@ export default function HeroAdmin() {
   <span className="text-gray-700">Visible</span>
             </label>
            
-            <label className="flex items-center space-x-2 cursor-pointer mt-2">
-             <input
-                    type="color"
-                    value={form.textColor}
-                    onChange={(e) => {
-                      setForm({ ...form, textColor: e.target.value });
-                    }}
-                    className="w-12 h-10 border border-gray-300 rounded-md mr-2"
-            />
-            Text Color
-          </label>
+            <div className="flex flex-col gap-2 mt-4">
+              <label className="font-semibold">Text Color (Preview below)</label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="color"
+                  value={form.textColor}
+                  onChange={(e) => {
+                    setForm({ ...form, textColor: e.target.value });
+                  }}
+                  className="w-16 h-12 border border-gray-300 rounded-md"
+                  aria-label="Text color picker"
+                />
+                <span className="font-mono text-gray-700">{form.textColor}</span>
+              </div>
+              {/* Live preview */}
+              <div className="mt-2 p-4 rounded border bg-gray-50">
+                <div className="text-xl font-bold mb-1" style={{ color: form.textColor }}>{form.title || 'Title Preview'}</div>
+                <div className="text-gray-700" style={{ color: form.textColor }}>{form.description || 'Description preview...'}</div>
+              </div>
+            </div>
             <button
               type="submit"
               disabled={loading}

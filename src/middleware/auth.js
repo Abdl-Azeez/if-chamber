@@ -1,7 +1,15 @@
 import jwt from "jsonwebtoken";
 
 export function authenticateToken(req) {
-  const token = req.headers.get("authorization")?.split(" ")[1];
+  // Try both lowercase and capitalized
+  const authHeader = req.headers.get("authorization") || req.headers.get("Authorization");
+  const token = authHeader?.split(" ")[1];
+
+  // Debug log for troubleshooting
+  if (process.env.NODE_ENV !== 'production') {
+    console.log("[auth] Received headers:", Object.fromEntries(req.headers.entries()));
+    console.log("[auth] Extracted token:", token);
+  }
 
   if (!token) {
     return { error: "Access token required" };
